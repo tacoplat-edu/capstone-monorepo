@@ -1,18 +1,61 @@
 #include <Arduino.h>
+#include "Config.h"
+#include "NetworkClient.h"
+#include "TemperatureControl.h"
+#include "FluidControl.h"
+#include "LightingControl.h"
 
-// put function declarations here:
-int myFunction(int, int);
+// --- Global Objects ---
+NetworkClient network;
+TemperatureControl tempControl;
+FluidControl fluidControl;
+LightingControl lightControl;
+
+// --- State Variables ---
+SystemTargets currentTargets; // Holds the data fetched from backend
+
+// --- Helper for Simulation ---
+float simulateTempSensor() {
+    // Generates a fake temperature that slowly fluctuates around 22C
+    static float temp = 22.0;
+    temp += ((random(0, 20) - 10) / 100.0);
+    return temp;
+}
 
 void setup() {
-  // put your setup code here, to run once:
-  int result = myFunction(2, 3);
+    Serial.begin(SERIAL_BAUD);
+    pinMode(PIN_ONBOARD_LED, OUTPUT);
+
+    Serial.println("--- PLANTBOX FIRMWARE STARTING ---");
+
+    // Initialize Subsystems
+    network.setup();
+    tempControl.setup();
+    fluidControl.setup();
+    lightControl.setup();
+
+    // Default Targets (Safety fallback)
+    currentTargets.targetTemp = 24.0;
+    currentTargets.triggerWatering = false;
 }
 
 void loop() {
-  // put your main code here, to run repeatedly:
-}
+    // 1. Network: Fetch latest setpoints
+    network.pollBackend(currentTargets);
 
-// put function definitions here:
-int myFunction(int x, int y) {
-  return x + y;
+    // 2. Read Sensors (Simulated)
+    float currentTemp = simulateTempSensor();
+
+    // 3. Run Control Loops
+    tempControl.loop(currentTemp, currentTargets.targetTemp);
+    fluidControl.loop();
+    lightControl.loop();
+
+    // 4. Handle Triggers from Backend
+    if (currentTargets.triggerWatering) {
+        fluidControl.triggerWateringCycle();
+        currentTargets.triggerWatering = false; // Reset flag
+    }
+
+    delay(CONTROL_LOOP_DELAY_MS);
 }
