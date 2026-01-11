@@ -4,18 +4,20 @@ import logging
 import os
 import sys
 from collections import deque
-from datetime import datetime, time
+from datetime import datetime, time, timedelta
 from pathlib import Path
-from typing import Deque, Dict, List, Optional
+from typing import Deque, Dict, List, Optional, Any
 from uuid import uuid4
 
-from fastapi import FastAPI, HTTPException
+from fastapi import FastAPI, HTTPException, Header, Depends
 from pydantic import BaseModel, Field
 
+# --- Path Setup ---
 ROOT = Path(__file__).resolve().parents[2]
 if str(ROOT) not in sys.path:
     sys.path.append(str(ROOT))
 
+# --- Optional Library Imports ---
 try:
     from libs.mailer.client import EmailClient, EmailConfig
 except Exception:
@@ -24,96 +26,89 @@ except Exception:
 
 try:
     from libs.mongo.storage import MongoConfig, MongoStorage
-except Exception:
+except Exception as exc:
     MongoConfig = None
     MongoStorage = None
 
 logging.basicConfig(level=logging.INFO)
 
-app = FastAPI(title="Plantbox API", version="0.1.0")
+app = FastAPI(title="Plantbox API", version="0.2.0")
 
-PLANT_PROFILES: Dict[str, Dict[str, float]] = {
-    "lettuce": {
-        "target_temperature_c": 21.0,
-        "target_water_level_pct": 65.0,
-        "target_flow_rate_lpm": 1.0,
-        "light_hours": 14.0,
-    },
-    "basil": {
-        "target_temperature_c": 24.0,
-        "target_water_level_pct": 60.0,
-        "target_flow_rate_lpm": 1.2,
-        "light_hours": 16.0,
-    },
-    "strawberry": {
-        "target_temperature_c": 20.0,
-        "target_water_level_pct": 70.0,
-        "target_flow_rate_lpm": 0.8,
-        "light_hours": 12.0,
-    },
+# --- Default/Fallback Data ---
+DEFAULT_TARGETS = {
+    "air_temp": {"min": 18.0, "max": 28.0},
+    "humidity": {"min": 40.0, "max": 80.0},
+    "water_level": {"min": 50.0, "max": 100.0},
 }
 
+# --- Pydantic Models (Updated for "My Basil" UI) ---
 
 class LightSchedule(BaseModel):
     start: time
     end: time
 
+class TargetRange(BaseModel):
+    min: float
+    max: float
 
-class NutrientSchedule(BaseModel):
-    start: time
-    end: time
-    dose_ml: float = Field(..., ge=0)
+class DeviceCamera(BaseModel):
+    stream_url: Optional[str] = None
+    snapshot_url: Optional[str] = None
+    enabled: bool = False
 
-
-class ConfigState(BaseModel):
-    target_temperature_c: float = Field(..., ge=0)
-    target_water_level_pct: float = Field(..., ge=0, le=100)
-    target_flow_rate_lpm: float = Field(..., ge=0)
+# Replaces the old ConfigState to match the new UI/DB schema
+class DeviceConfig(BaseModel):
+    hardware_id: str
+    display_name: str = "My PlantBox"
+    owner_id: str
+    
+    # Schedules shown in the UI
     light_schedule: LightSchedule
-    nutrient_schedule: NutrientSchedule
-    active_profile: str = "lettuce"
+    
+    # Thresholds (Used to determine if UI card is Green or Red)
+    targets: Dict[str, TargetRange] = {
+        "air_temp": TargetRange(**DEFAULT_TARGETS["air_temp"]),
+        "humidity": TargetRange(**DEFAULT_TARGETS["humidity"]),
+        "water_level": TargetRange(**DEFAULT_TARGETS["water_level"])
+    }
+    
+    camera: DeviceCamera = DeviceCamera()
+    
+    # Heartbeat tracking
+    last_seen: datetime = Field(default_factory=datetime.utcnow)
+    is_online: bool = True
+    
+    updated_at: datetime = Field(default_factory=datetime.utcnow)
 
+class SensorReadings(BaseModel):
+    air_temp_c: float = Field(..., description="Air Temperature in Celsius")
+    humidity_pct: float = Field(..., ge=0, le=100, description="Relative Humidity %")
+    light_intensity_pct: float = Field(..., ge=0, le=100)
+    water_level_pct: float = Field(..., ge=0, le=100)
+    nutrient_a_pct: float = Field(..., ge=0, le=100, description="Nutrient Tank A Level")
 
 class TelemetryIn(BaseModel):
-    temperature_c: float
-    water_level_pct: float
-    flow_rate_lpm: float
-    light_lux: Optional[float] = None
-    blackout_mode: bool = False
+    device_id: str
+    sensors: SensorReadings
     captured_at: datetime = Field(default_factory=datetime.utcnow)
-
 
 class TelemetryRecord(TelemetryIn):
     received_at: datetime
-
+    metadata: Dict[str, Any] = {} # For profile_active, etc.
 
 class Notification(BaseModel):
     id: str
     level: str
     message: str
     created_at: datetime
-    telemetry: Optional[TelemetryIn] = None
+    device_id: str
 
+# --- Helper Functions ---
 
 def model_to_dict(model: BaseModel) -> Dict[str, object]:
     if hasattr(model, "model_dump"):
         return model.model_dump()
     return model.dict()
-
-
-def build_default_config(profile_name: str = "lettuce") -> ConfigState:
-    profile = PLANT_PROFILES.get(profile_name, PLANT_PROFILES["lettuce"])
-    return ConfigState(
-        target_temperature_c=profile["target_temperature_c"],
-        target_water_level_pct=profile["target_water_level_pct"],
-        target_flow_rate_lpm=profile["target_flow_rate_lpm"],
-        light_schedule=LightSchedule(start=time(6, 0), end=time(20, 0)),
-        nutrient_schedule=NutrientSchedule(
-            start=time(8, 0), end=time(8, 30), dose_ml=15.0
-        ),
-        active_profile=profile_name,
-    )
-
 
 def load_email_settings() -> Optional[Dict[str, object]]:
     if EmailClient is None or EmailConfig is None:
@@ -126,17 +121,14 @@ def load_email_settings() -> Optional[Dict[str, object]]:
     recipients = [item.strip() for item in recipients_raw.split(",") if item.strip()]
     if not smtp_server or not username or not password or not from_email or not recipients:
         return None
-    smtp_port = int(os.getenv("SMTP_PORT", "587"))
-    use_tls = os.getenv("SMTP_USE_TLS", "true").lower() != "false"
     config = EmailConfig(
         smtp_server=smtp_server,
-        smtp_port=smtp_port,
+        smtp_port=int(os.getenv("SMTP_PORT", "587")),
         username=username,
         password=password,
-        use_tls=use_tls,
+        use_tls=os.getenv("SMTP_USE_TLS", "true").lower() != "false",
     )
     return {"client": EmailClient(config), "from_email": from_email, "to": recipients}
-
 
 def build_mongo_storage() -> Optional[MongoStorage]:
     if MongoStorage is None or MongoConfig is None:
@@ -146,135 +138,192 @@ def build_mongo_storage() -> Optional[MongoStorage]:
         return None
     db_name = os.getenv("MONGO_DB", "plantbox")
     try:
-        return MongoStorage(MongoConfig(uri=uri, db_name=db_name))
+        storage = MongoStorage(MongoConfig(uri=uri, db_name=db_name))
+        # Create indexes for performance
+        storage.db["telemetry"].create_index([("device_id", 1), ("received_at", -1)])
+        storage.db["devices"].create_index([("hardware_id", 1)], unique=True)
+        logging.info("Connected to Mongo")
+        return storage
     except Exception as exc:
-        logging.warning("Mongo disabled: %s", exc)
+        logging.warning("Mongo disabled/failed: %s", exc)
         return None
 
+# --- Logic: Storage & Notifications ---
 
-def deviation_pct(actual: float, target: float) -> float:
-    if target <= 0:
-        return 0.0
-    return abs(actual - target) / target
+def get_or_create_device_config(hardware_id: str) -> DeviceConfig:
+    """Loads config from DB or returns default."""
+    if MONGO_STORAGE:
+        data = MONGO_STORAGE.db["devices"].find_one({"hardware_id": hardware_id})
+        if data:
+            data.pop("_id", None)
+            return DeviceConfig(**data)
+            
+    # Default Fallback
+    return DeviceConfig(
+        hardware_id=hardware_id, 
+        owner_id="default_user",
+        light_schedule=LightSchedule(start=time(6,0), end=time(18,0))
+    )
 
+def save_device_config(config: DeviceConfig):
+    if MONGO_STORAGE:
+        data = model_to_dict(config)
+        MONGO_STORAGE.db["devices"].update_one(
+            {"hardware_id": config.hardware_id},
+            {"$set": data},
+            upsert=True
+        )
 
-def evaluate_telemetry(telemetry: TelemetryIn, config: ConfigState) -> List[str]:
-    alerts: List[str] = []
-    if deviation_pct(telemetry.temperature_c, config.target_temperature_c) > 0.10:
-        alerts.append("Temperature drift above 10 percent.")
-    if deviation_pct(telemetry.water_level_pct, config.target_water_level_pct) > 0.10:
-        alerts.append("Water level drift above 10 percent.")
-    if deviation_pct(telemetry.flow_rate_lpm, config.target_flow_rate_lpm) > 0.10:
-        alerts.append("Flow rate drift above 10 percent.")
-    if telemetry.blackout_mode:
-        alerts.append("Blackout mode triggered.")
+def store_telemetry(record: TelemetryRecord):
+    if MONGO_STORAGE:
+        MONGO_STORAGE.insert_one("telemetry", model_to_dict(record))
+
+def check_alerts(telemetry: TelemetryIn, config: DeviceConfig) -> List[str]:
+    alerts = []
+    sensors = telemetry.sensors
+    targets = config.targets
+
+    # Check Air Temp
+    if "air_temp" in targets:
+        t = targets["air_temp"]
+        if sensors.air_temp_c < t.min or sensors.air_temp_c > t.max:
+            alerts.append(f"Temp {sensors.air_temp_c}°C out of range ({t.min}-{t.max})")
+
+    # Check Humidity
+    if "humidity" in targets:
+        h = targets["humidity"]
+        if sensors.humidity_pct < h.min or sensors.humidity_pct > h.max:
+            alerts.append(f"Humidity {sensors.humidity_pct}% out of range")
+
+    # Check Water
+    if "water_level" in targets:
+        w = targets["water_level"]
+        if sensors.water_level_pct < w.min: 
+             alerts.append(f"Water level low: {sensors.water_level_pct}%")
+
     return alerts
 
-
-def evaluate_profile(telemetry: TelemetryIn, profile_name: str) -> List[str]:
-    profile = PLANT_PROFILES.get(profile_name)
-    if not profile:
-        return []
-    alerts: List[str] = []
-    if deviation_pct(telemetry.temperature_c, profile["target_temperature_c"]) > 0.10:
-        alerts.append(f"Temperature outside {profile_name} profile.")
-    if deviation_pct(telemetry.water_level_pct, profile["target_water_level_pct"]) > 0.10:
-        alerts.append(f"Water level outside {profile_name} profile.")
-    if deviation_pct(telemetry.flow_rate_lpm, profile["target_flow_rate_lpm"]) > 0.10:
-        alerts.append(f"Flow rate outside {profile_name} profile.")
-    return alerts
-
-
-def queue_notification(level: str, message: str, telemetry: TelemetryIn) -> Notification:
+def queue_notification(level: str, message: str, device_id: str):
     note = Notification(
         id=str(uuid4()),
         level=level,
         message=message,
         created_at=datetime.utcnow(),
-        telemetry=telemetry,
+        device_id=device_id
     )
     notifications.append(note)
+    # Persist notification
+    if MONGO_STORAGE:
+        MONGO_STORAGE.insert_one("notifications", model_to_dict(note))
+
     if EMAIL_SETTINGS:
         try:
             EMAIL_SETTINGS["client"].send_email(
-                subject=f"Plantbox alert: {level.upper()}",
-                body=message,
+                subject=f"Plantbox Alert: {level.upper()}",
+                body=f"Device: {device_id}\n\n{message}",
                 from_email=EMAIL_SETTINGS["from_email"],
                 to_emails=EMAIL_SETTINGS["to"],
             )
         except Exception as exc:
             logging.warning("Email send failed: %s", exc)
-    return note
 
-
-def store_telemetry(record: TelemetryRecord) -> None:
-    if not MONGO_STORAGE:
-        return
-    try:
-        MONGO_STORAGE.insert_one("telemetry", model_to_dict(record))
-    except Exception as exc:
-        logging.warning("Mongo insert failed: %s", exc)
-
-
-config_state = build_default_config()
+# --- Global State (Memory Cache) ---
 telemetry_log: Deque[TelemetryRecord] = deque(maxlen=500)
 notifications: Deque[Notification] = deque(maxlen=200)
 EMAIL_SETTINGS = load_email_settings()
 MONGO_STORAGE = build_mongo_storage()
 
+# --- API Endpoints ---
 
 @app.get("/health")
 def health() -> Dict[str, str]:
     return {"status": "ok"}
 
+@app.get("/devices/{hardware_id}/config", response_model=DeviceConfig)
+def get_device_config(hardware_id: str):
+    config = get_or_create_device_config(hardware_id)
+    
+    # Calculate online status dynamically
+    time_diff = datetime.utcnow() - config.last_seen
+    config.is_online = time_diff < timedelta(minutes=2)
+    
+    return config
 
-@app.get("/config", response_model=ConfigState)
-def get_config() -> ConfigState:
-    return config_state
-
-
-@app.post("/config", response_model=ConfigState)
-def update_config(config: ConfigState) -> ConfigState:
-    global config_state
-    config_state = config
-    return config_state
-
-
-@app.get("/profiles")
-def list_profiles() -> Dict[str, Dict[str, float]]:
-    return PLANT_PROFILES
-
+@app.post("/devices/{hardware_id}/config", response_model=DeviceConfig)
+def update_device_config(hardware_id: str, config_update: DeviceConfig):
+    if config_update.hardware_id != hardware_id:
+        raise HTTPException(status_code=400, detail="Hardware ID mismatch")
+    
+    config_update.updated_at = datetime.utcnow()
+    save_device_config(config_update)
+    return config_update
 
 @app.post("/telemetry")
-def post_telemetry(telemetry: TelemetryIn) -> Dict[str, object]:
-    record = TelemetryRecord(**model_to_dict(telemetry), received_at=datetime.utcnow())
+def post_telemetry(telemetry: TelemetryIn) -> Dict[str, Any]:
+    # 1. Update Device "Last Seen" and Status
+    if MONGO_STORAGE:
+        MONGO_STORAGE.db["devices"].update_one(
+            {"hardware_id": telemetry.device_id},
+            {"$set": {"last_seen": datetime.utcnow(), "is_online": True}}
+        )
+
+    # 2. Store Telemetry
+    record = TelemetryRecord(
+        **model_to_dict(telemetry),
+        received_at=datetime.utcnow(),
+        metadata={"processed_by": "plantbox-v2"}
+    )
     telemetry_log.append(record)
     store_telemetry(record)
 
-    alerts = evaluate_telemetry(telemetry, config_state)
-    profile_alerts = evaluate_profile(telemetry, config_state.active_profile)
-    if alerts or profile_alerts:
-        all_alerts = alerts + profile_alerts
-        level = "critical" if telemetry.blackout_mode else "warning"
-        queue_notification(level, " ".join(all_alerts), telemetry)
+    # 3. Check Alerts against current config
+    config = get_or_create_device_config(telemetry.device_id)
+    alerts = check_alerts(telemetry, config)
+    
+    if alerts:
+        queue_notification("warning", "; ".join(alerts), telemetry.device_id)
 
-    return {"status": "ok", "alerts": alerts, "profile_alerts": profile_alerts}
+    return {"status": "ok", "alerts": alerts}
 
-
-@app.get("/telemetry", response_model=List[TelemetryRecord])
-def list_telemetry(limit: int = 50) -> List[TelemetryRecord]:
+@app.get("/devices/{hardware_id}/telemetry", response_model=List[TelemetryRecord])
+def list_device_telemetry(hardware_id: str, limit: int = 50):
     limit = max(1, min(limit, 500))
-    return list(telemetry_log)[-limit:]
+    
+    # Try Mongo first for historical data
+    if MONGO_STORAGE:
+        cursor = MONGO_STORAGE.db["telemetry"].find(
+            {"device_id": hardware_id}
+        ).sort("received_at", -1).limit(limit)
+        results = list(cursor)
+        # Convert _id to string or remove it
+        for r in results:
+            r.pop("_id", None)
+        return [TelemetryRecord(**r) for r in results]
+    
+    # Fallback to memory cache
+    return [t for t in telemetry_log if t.device_id == hardware_id][-limit:]
 
+@app.get("/devices/{hardware_id}/telemetry/latest", response_model=TelemetryRecord)
+def latest_device_telemetry(hardware_id: str):
+    # Try to find latest in memory first (faster)
+    for t in reversed(telemetry_log):
+        if t.device_id == hardware_id:
+            return t
+            
+    # Fallback to DB
+    if MONGO_STORAGE:
+        data = MONGO_STORAGE.db["telemetry"].find_one(
+            {"device_id": hardware_id}, 
+            sort=[("received_at", -1)]
+        )
+        if data:
+            data.pop("_id", None)
+            return TelemetryRecord(**data)
 
-@app.get("/telemetry/latest", response_model=TelemetryRecord)
-def latest_telemetry() -> TelemetryRecord:
-    if not telemetry_log:
-        raise HTTPException(status_code=404, detail="No telemetry received yet.")
-    return telemetry_log[-1]
-
+    raise HTTPException(status_code=404, detail="No telemetry found for this device.")
 
 @app.get("/notifications", response_model=List[Notification])
-def list_notifications(limit: int = 50) -> List[Notification]:
+def list_notifications(limit: int = 50):
     limit = max(1, min(limit, 200))
+    # Combine memory and DB if needed, simplified here to return memory + DB fetch could be added
     return list(notifications)[-limit:]

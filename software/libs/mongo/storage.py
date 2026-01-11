@@ -135,3 +135,8 @@ class MongoStorage:
 
         result = self.get_collection(collection).delete_many(query)
         return result.deleted_count
+
+    @property
+    def db(self):
+        """Return the database handle."""
+        return self._db
