@@ -87,10 +87,17 @@ class SensorReadings(BaseModel):
     water_level_pct: float = Field(..., ge=0, le=100)
     nutrient_a_pct: float = Field(..., ge=0, le=100, description="Nutrient Tank A Level")
 
+# class TelemetryIn(BaseModel):
+#     device_id: str
+#     sensors: SensorReadings
+#     captured_at: datetime = Field(default_factory=datetime.utcnow)
+
 class TelemetryIn(BaseModel):
-    device_id: str
-    sensors: SensorReadings
-    captured_at: datetime = Field(default_factory=datetime.utcnow)
+    temperature: float
+    heater: float
+    fan: float
+    watering: float
+
 
 class TelemetryRecord(TelemetryIn):
     received_at: datetime
@@ -180,26 +187,26 @@ def store_telemetry(record: TelemetryRecord):
 
 def check_alerts(telemetry: TelemetryIn, config: DeviceConfig) -> List[str]:
     alerts = []
-    sensors = telemetry.sensors
-    targets = config.targets
+    # sensors = telemetry.sensors
+    # targets = config.targets
 
-    # Check Air Temp
-    if "air_temp" in targets:
-        t = targets["air_temp"]
-        if sensors.air_temp_c < t.min or sensors.air_temp_c > t.max:
-            alerts.append(f"Temp {sensors.air_temp_c}°C out of range ({t.min}-{t.max})")
+    # # Check Air Temp
+    # if "air_temp" in targets:
+    #     t = targets["air_temp"]
+    #     if sensors.air_temp_c < t.min or sensors.air_temp_c > t.max:
+    #         alerts.append(f"Temp {sensors.air_temp_c}°C out of range ({t.min}-{t.max})")
 
-    # Check Humidity
-    if "humidity" in targets:
-        h = targets["humidity"]
-        if sensors.humidity_pct < h.min or sensors.humidity_pct > h.max:
-            alerts.append(f"Humidity {sensors.humidity_pct}% out of range")
+    # # Check Humidity
+    # if "humidity" in targets:
+    #     h = targets["humidity"]
+    #     if sensors.humidity_pct < h.min or sensors.humidity_pct > h.max:
+    #         alerts.append(f"Humidity {sensors.humidity_pct}% out of range")
 
-    # Check Water
-    if "water_level" in targets:
-        w = targets["water_level"]
-        if sensors.water_level_pct < w.min: 
-             alerts.append(f"Water level low: {sensors.water_level_pct}%")
+    # # Check Water
+    # if "water_level" in targets:
+    #     w = targets["water_level"]
+    #     if sensors.water_level_pct < w.min: 
+    #          alerts.append(f"Water level low: {sensors.water_level_pct}%")
 
     return alerts
 
@@ -236,8 +243,8 @@ MONGO_STORAGE = build_mongo_storage()
 # --- API Endpoints ---
 
 @app.get("/health")
-def health() -> Dict[str, str]:
-    return {"status": "ok"}
+def health() -> Dict[str, Any]:
+    return {"targetTemp": 26.5, "triggerWatering": False}
 
 @app.get("/devices/{hardware_id}/config", response_model=DeviceConfig)
 def get_device_config(hardware_id: str):
@@ -258,32 +265,33 @@ def update_device_config(hardware_id: str, config_update: DeviceConfig):
     save_device_config(config_update)
     return config_update
 
-@app.post("/telemetry")
+@app.post("/setTelemetry")
 def post_telemetry(telemetry: TelemetryIn) -> Dict[str, Any]:
     # 1. Update Device "Last Seen" and Status
-    if MONGO_STORAGE:
-        MONGO_STORAGE.db["devices"].update_one(
-            {"hardware_id": telemetry.device_id},
-            {"$set": {"last_seen": datetime.utcnow(), "is_online": True}}
-        )
+    # if MONGO_STORAGE:
+    #     MONGO_STORAGE.db["devices"].update_one(
+    #         {"hardware_id": telemetry.device_id},
+    #         {"$set": {"last_seen": datetime.utcnow(), "is_online": True}}
+    #     )
 
-    # 2. Store Telemetry
-    record = TelemetryRecord(
-        **model_to_dict(telemetry),
-        received_at=datetime.utcnow(),
-        metadata={"processed_by": "plantbox-v2"}
-    )
-    telemetry_log.append(record)
-    store_telemetry(record)
+    # # 2. Store Telemetry
+    # record = TelemetryRecord(
+    #     **model_to_dict(telemetry),
+    #     received_at=datetime.utcnow(),
+    #     metadata={"processed_by": "plantbox-v2"}
+    # )
+    # telemetry_log.append(record)
+    # store_telemetry(record)
 
-    # 3. Check Alerts against current config
-    config = get_or_create_device_config(telemetry.device_id)
-    alerts = check_alerts(telemetry, config)
+    # # 3. Check Alerts against current config
+    # config = get_or_create_device_config(telemetry.device_id)
+    # alerts = check_alerts(telemetry, config)
     
-    if alerts:
-        queue_notification("warning", "; ".join(alerts), telemetry.device_id)
-
-    return {"status": "ok", "alerts": alerts}
+    # if alerts:
+    #     queue_notification("warning", "; ".join(alerts), telemetry.device_id)
+    
+    logging.info(telemetry)
+    return {"status": "ok", "alerts": []}
 
 @app.get("/devices/{hardware_id}/telemetry", response_model=List[TelemetryRecord])
 def list_device_telemetry(hardware_id: str, limit: int = 50):
