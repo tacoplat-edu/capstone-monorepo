@@ -84,7 +84,7 @@ class SensorReadings(BaseModel):
     air_temp_c: float = Field(..., description="Air Temperature in Celsius")
     humidity_pct: float = Field(..., ge=0, le=100, description="Relative Humidity %")
     light_intensity_pct: float = Field(..., ge=0, le=100, description="Light Sensor Level")
-    water_level_pct: float = Field(..., ge=0, le=100)
+    water_level_pct: float = Field(..., ge=0, le=100, description="Water Level in Reservoir")
     nutrient_a_pct: float = Field(..., ge=0, le=100, description="Nutrient Tank A Level")
     moisture_pct: float = Field(..., ge=0, le=100, description="Moisture Sensor Level")
 
