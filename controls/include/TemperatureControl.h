@@ -8,8 +8,16 @@ class TemperatureControl {
 public:
     void setup();
     void loop(float currentTemp, float targetTemp);
+    
+    // Getters for Telemetry
+    int getHeaterPWM() { return currentHeaterPWM; }
+    bool getFanState() { return currentFanState; }
 
 private:
+    // State tracking variables
+    int currentHeaterPWM = 0;
+    bool currentFanState = false;
+
     // PID Constants (Need tuning as per report Sec 3.4)
     float Kp = 2.0;
     float Ki = 0.5;

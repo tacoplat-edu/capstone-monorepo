@@ -8,17 +8,21 @@
 
 struct SystemTargets {
     float targetTemp;
-    float targetHumidity; // Coupled in report, but separated in controls
-    bool triggerWatering; // Backend flag to force watering
+    float targetHumidity; 
+    bool triggerWatering; 
 };
 
 class NetworkClient {
 public:
     void setup();
-    void pollBackend(SystemTargets &targets); // Updates the targets by ref
+    void pollBackend(SystemTargets &targets); 
+    
+    // New function to POST telemetry
+    void sendTelemetry(float currentTemp, bool heaterState, bool fanState, bool isWatering);
 
 private:
     unsigned long lastPollTime = 0;
+    unsigned long lastTelemetryTime = 0; // Timer for sending data
 };
 
 #endif

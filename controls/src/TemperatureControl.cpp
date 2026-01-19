@@ -24,13 +24,8 @@ void TemperatureControl::loop(float currentTemp, float targetTemp) {
     if (output > 255) output = 255;
     if (output < 0) output = 0;
 
-    // --- Rate Limiting Logic (Report Sec 3.4) ---
-    // If temp is rising too fast, kill heater even if PID wants it on
-    // (This requires history of temp, simplified here for simulation)
-
-    // --- Actuation ---
-    // Fan logic: If heater is high, turn on fan to circulate.
-    // Or if temp is too high, turn on fan to cool (Bang-bang control for cooling).
+    // --- Actuation Logic ---
+    // Fan logic: If temp is too high, fan cools. If heater is high, fan circulates.
     int fanState = 0;
     if (currentTemp > targetTemp + 1.0) {
         fanState = 1; // Cooling needed
@@ -46,18 +41,22 @@ void TemperatureControl::loop(float currentTemp, float targetTemp) {
 }
 
 void TemperatureControl::setActuators(int heaterPWM, int fanState) {
-    // SIMULATION: Print instead of writing
+    // 1. SAVE STATE for Telemetry
+    currentHeaterPWM = heaterPWM;
+    currentFanState = (fanState > 0);
+
+    // 2. SIMULATION: Print instead of writing to pins
     // In real code: analogWrite(PIN_HEATER, heaterPWM);
     // In real code: digitalWrite(PIN_FAN, fanState);
 
     static unsigned long lastPrint = 0;
     if (millis() - lastPrint > 2000) { // Don't spam serial
         Serial.printf("TEMP_CTRL: Heater PWM: %d | Fan: %s\n", heaterPWM, fanState ? "ON" : "OFF");
-
+        
         // Visual feedback on LED if Heater is working hard
         if (heaterPWM > 100) digitalWrite(PIN_ONBOARD_LED, HIGH);
         else digitalWrite(PIN_ONBOARD_LED, LOW);
-
+        
         lastPrint = millis();
     }
 }

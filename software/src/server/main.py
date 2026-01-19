@@ -94,9 +94,12 @@ class SensorReadings(BaseModel):
 
 class TelemetryIn(BaseModel):
     temperature: float
-    heater: float
-    fan: float
-    watering: float
+    heater: float # remove
+    fan: float # remove
+    watering: float # water in tank
+    #add place holder for moisture sensor: float
+    #add place holder for light sensor: float
+    
 
 
 class TelemetryRecord(TelemetryIn):

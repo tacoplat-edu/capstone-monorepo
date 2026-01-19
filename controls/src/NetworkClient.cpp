@@ -6,11 +6,12 @@ void NetworkClient::setup() {
     while (WiFi.status() != WL_CONNECTED) {
         delay(500);
         Serial.print(".");
-        // Blink LED to show we are trying to connect
         digitalWrite(PIN_ONBOARD_LED, !digitalRead(PIN_ONBOARD_LED));
     }
     Serial.println("\nNET: Connected.");
-    digitalWrite(PIN_ONBOARD_LED, LOW); // Off when connected
+    Serial.print("NET: IP Address: ");
+    Serial.println(WiFi.localIP()); // Print IP to confirm network segment
+    digitalWrite(PIN_ONBOARD_LED, LOW); 
 }
 
 void NetworkClient::pollBackend(SystemTargets &targets) {
@@ -18,26 +19,68 @@ void NetworkClient::pollBackend(SystemTargets &targets) {
     lastPollTime = millis();
 
     if (WiFi.status() == WL_CONNECTED) {
+        WiFiClient client; // Standard Client for HTTP
         HTTPClient http;
-        // In reality, you'd likely append an ID, e.g., ?id=plantbox_12
-        http.begin(API_ENDPOINT);
+        
+        // Pass the standard client into .begin()
+        if (http.begin(client, API_ENDPOINT)) { 
+            Serial.println("NET: Polling Backend...");
+            int httpCode = http.GET();
 
-        Serial.println("NET: Polling Backend...");
-        int httpCode = http.GET();
-
-        if (httpCode > 0) {
-            String payload = http.getString();
-            Serial.println("NET: Received: " + payload);
-
-            // TODO: Parse JSON here. For now, we simulate receiving new targets.
-            // Example simulation:
-            // targets.targetTemp = 24.5;
-            // targets.triggerWatering = false;
+            if (httpCode > 0) {
+                String payload = http.getString();
+                Serial.println("NET: Received: " + payload);
+                // TODO: Parse JSON here if your server returns targets
+            } else {
+                Serial.printf("NET: GET Error: %s\n", http.errorToString(httpCode).c_str());
+            }
+            http.end();
         } else {
-            Serial.printf("NET: Error %d\n", httpCode);
+            Serial.println("NET: Unable to connect to server");
         }
-        http.end();
     } else {
         Serial.println("NET: WiFi Disconnected");
+    }
+}
+
+void NetworkClient::sendTelemetry(float currentTemp, bool heaterState, bool fanState, bool isWatering) {
+    if (millis() - lastTelemetryTime < TELEMETRY_INTERVAL_MS) return;
+    lastTelemetryTime = millis();
+
+    if (WiFi.status() == WL_CONNECTED) {
+        WiFiClient client; // Standard Client for HTTP
+        HTTPClient http;
+        
+        if (http.begin(client, API_TELEMETRY)) {
+            
+            // Format JSON: {"temperature": 24.5, "heater": true, "fan": false, "watering": false}
+            // Note: Using "true"/"false" instead of 1/0 is often safer for JSON parsers
+            String jsonPayload = "{";
+            jsonPayload += "\"temperature\": " + String(currentTemp) + ",";
+            jsonPayload += "\"heater\": " + String(heaterState ? "true" : "false") + ",";
+            jsonPayload += "\"fan\": " + String(fanState ? "true" : "false") + ",";
+            jsonPayload += "\"watering\": " + String(isWatering ? "true" : "false");
+            jsonPayload += "}";
+
+            http.addHeader("Content-Type", "application/json");
+
+            Serial.println("NET: Sending Telemetry -> " + jsonPayload);
+            int httpResponseCode = http.POST(jsonPayload);
+
+            if (httpResponseCode > 0) {
+                String response = http.getString();
+                Serial.print("NET: Telemetry Sent. Response: ");
+                Serial.println(httpResponseCode); 
+                // Print response body if useful for debugging
+                // Serial.println(response);
+            } else {
+                Serial.print("NET: POST Error: ");
+                Serial.println(http.errorToString(httpResponseCode).c_str());
+            }
+
+            http.end();
+        } else {
+            Serial.println("NET: Unable to connect to telemetry server");
+        }
     }
 }

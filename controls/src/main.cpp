@@ -51,7 +51,16 @@ void loop() {
     fluidControl.loop();
     lightControl.loop();
 
-    // 4. Handle Triggers from Backend
+    // 4. Gather Telemetry Data
+    // We retrieve the current state from our controllers to send to the cloud
+    bool heaterState = (tempControl.getHeaterPWM() > 0); 
+    bool fanState = tempControl.getFanState();
+    bool wateringState = fluidControl.isWateringActive();
+
+    // 5. Send Telemetry
+    network.sendTelemetry(currentTemp, heaterState, fanState, wateringState);
+
+    // 6. Handle Triggers from Backend
     if (currentTargets.triggerWatering) {
         fluidControl.triggerWateringCycle();
         currentTargets.triggerWatering = false; // Reset flag
