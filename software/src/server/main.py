@@ -136,6 +136,7 @@ def build_mongo_storage() -> Optional[MongoStorage]:
         return None
     uri = os.getenv("MONGO_URI")
     if not uri:
+        sys.exit("MONGO_URI not set")
         return None
     db_name = os.getenv("MONGO_DB", "plantbox")
     try:
@@ -252,14 +253,45 @@ def fetch_reference_values(hardware_id: str):
     return config
 
 # Allow updating config via standard REST path (optional helper)
-@app.post("/devices/{hardware_id}/config", response_model=DeviceConfig)
-def update_device_config(hardware_id: str, config_update: DeviceConfig):
-    if config_update.hardware_id != hardware_id:
+# Helper for Recursive Updates
+def deep_merge(source: Dict[str, Any], destination: Dict[str, Any]) -> Dict[str, Any]:
+    """Recursively merges source into destination."""
+    for key, value in source.items():
+        if isinstance(value, dict):
+            node = destination.setdefault(key, {})
+            deep_merge(value, node)
+        else:
+            destination[key] = value
+    return destination
+
+@app.post("/devices/{hardware_id}/config", response_model=Dict[str, Any])
+def update_device_config(hardware_id: str, payload: Dict[str, Any]):
+    """
+    Accepts a partial or full configuration update.
+    Deep-merges the payload into the existing MongoDB document.
+    """
+    # 1. Fetch existing (or defaults if missing)
+    # We use get_or_create_device_config but want it as a dict to merge
+    existing_model = get_or_create_device_config(hardware_id)
+    existing_data = model_to_dict(existing_model)
+    
+    # 2. Merge changes
+    # Ensure hardware_id isn't tampered with if passed
+    if "hardware_id" in payload and payload["hardware_id"] != hardware_id:
         raise HTTPException(status_code=400, detail="Hardware ID mismatch")
     
-    config_update.updated_at = datetime.utcnow()
-    save_device_config(config_update)
-    return config_update
+    updated_data = deep_merge(payload, existing_data)
+    updated_data["updated_at"] = datetime.utcnow()
+    
+    # 3. Save to Mongo
+    if MONGO_STORAGE:
+        MONGO_STORAGE.db["devices"].update_one(
+            {"hardware_id": hardware_id},
+            {"$set": updated_data},
+            upsert=True
+        )
+        
+    return updated_data
 
 # Endpoint 2: Send Telemetry
 @app.post("/sendTelemetry")
