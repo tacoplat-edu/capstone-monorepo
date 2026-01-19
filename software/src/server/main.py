@@ -32,7 +32,7 @@ except Exception as exc:
 
 logging.basicConfig(level=logging.INFO)
 
-app = FastAPI(title="Plantbox API", version="0.2.0")
+app = FastAPI(title="Plantbox API", version="0.2.1")
 
 # --- Default/Fallback Data ---
 DEFAULT_TARGETS = {
@@ -41,7 +41,7 @@ DEFAULT_TARGETS = {
     "water_level": {"min": 50.0, "max": 100.0},
 }
 
-# --- Pydantic Models (Updated for "My Basil" UI) ---
+# --- Pydantic Models ---
 
 class LightSchedule(BaseModel):
     start: time
@@ -65,7 +65,7 @@ class DeviceConfig(BaseModel):
     # Schedules shown in the UI
     light_schedule: LightSchedule
     
-    # Thresholds (Used to determine if UI card is Green or Red)
+    # Thresholds (Reference Values)
     targets: Dict[str, TargetRange] = {
         "air_temp": TargetRange(**DEFAULT_TARGETS["air_temp"]),
         "humidity": TargetRange(**DEFAULT_TARGETS["humidity"]),
@@ -83,28 +83,19 @@ class DeviceConfig(BaseModel):
 class SensorReadings(BaseModel):
     air_temp_c: float = Field(..., description="Air Temperature in Celsius")
     humidity_pct: float = Field(..., ge=0, le=100, description="Relative Humidity %")
-    light_intensity_pct: float = Field(..., ge=0, le=100)
+    light_intensity_pct: float = Field(..., ge=0, le=100, description="Light Sensor Level")
     water_level_pct: float = Field(..., ge=0, le=100)
     nutrient_a_pct: float = Field(..., ge=0, le=100, description="Nutrient Tank A Level")
-
-# class TelemetryIn(BaseModel):
-#     device_id: str
-#     sensors: SensorReadings
-#     captured_at: datetime = Field(default_factory=datetime.utcnow)
+    moisture_pct: float = Field(..., ge=0, le=100, description="Moisture Sensor Level")
 
 class TelemetryIn(BaseModel):
-    temperature: float
-    heater: float # remove
-    fan: float # remove
-    watering: float # water in tank
-    #add place holder for moisture sensor: float
-    #add place holder for light sensor: float
-    
-
+    device_id: str
+    sensors: SensorReadings
+    captured_at: datetime = Field(default_factory=datetime.utcnow)
 
 class TelemetryRecord(TelemetryIn):
     received_at: datetime
-    metadata: Dict[str, Any] = {} # For profile_active, etc.
+    metadata: Dict[str, Any] = {} 
 
 class Notification(BaseModel):
     id: str
@@ -190,26 +181,26 @@ def store_telemetry(record: TelemetryRecord):
 
 def check_alerts(telemetry: TelemetryIn, config: DeviceConfig) -> List[str]:
     alerts = []
-    # sensors = telemetry.sensors
-    # targets = config.targets
+    sensors = telemetry.sensors
+    targets = config.targets
 
-    # # Check Air Temp
-    # if "air_temp" in targets:
-    #     t = targets["air_temp"]
-    #     if sensors.air_temp_c < t.min or sensors.air_temp_c > t.max:
-    #         alerts.append(f"Temp {sensors.air_temp_c}°C out of range ({t.min}-{t.max})")
+    # Example Check: Air Temp
+    if "air_temp" in targets:
+       t = targets["air_temp"]
+       if sensors.air_temp_c < t.min or sensors.air_temp_c > t.max:
+           alerts.append(f"Temp {sensors.air_temp_c}°C out of range ({t.min}-{t.max})")
 
-    # # Check Humidity
-    # if "humidity" in targets:
-    #     h = targets["humidity"]
-    #     if sensors.humidity_pct < h.min or sensors.humidity_pct > h.max:
-    #         alerts.append(f"Humidity {sensors.humidity_pct}% out of range")
+    # Example Check: Humidity
+    if "humidity" in targets:
+       h = targets["humidity"]
+       if sensors.humidity_pct < h.min or sensors.humidity_pct > h.max:
+           alerts.append(f"Humidity {sensors.humidity_pct}% out of range")
 
-    # # Check Water
-    # if "water_level" in targets:
-    #     w = targets["water_level"]
-    #     if sensors.water_level_pct < w.min: 
-    #          alerts.append(f"Water level low: {sensors.water_level_pct}%")
+    # Example Check: Water Level
+    if "water_level" in targets:
+       w = targets["water_level"]
+       if sensors.water_level_pct < w.min: 
+            alerts.append(f"Water level low: {sensors.water_level_pct}%")
 
     return alerts
 
@@ -247,10 +238,11 @@ MONGO_STORAGE = build_mongo_storage()
 
 @app.get("/health")
 def health() -> Dict[str, Any]:
-    return {"targetTemp": 26.5, "triggerWatering": False}
+    return {"status": "running"}
 
-@app.get("/devices/{hardware_id}/config", response_model=DeviceConfig)
-def get_device_config(hardware_id: str):
+# Endpoint 1: Fetch Reference Values (Config)
+@app.get("/devices/{hardware_id}/fetchRefVals", response_model=DeviceConfig)
+def fetch_reference_values(hardware_id: str):
     config = get_or_create_device_config(hardware_id)
     
     # Calculate online status dynamically
@@ -259,6 +251,7 @@ def get_device_config(hardware_id: str):
     
     return config
 
+# Allow updating config via standard REST path (optional helper)
 @app.post("/devices/{hardware_id}/config", response_model=DeviceConfig)
 def update_device_config(hardware_id: str, config_update: DeviceConfig):
     if config_update.hardware_id != hardware_id:
@@ -268,9 +261,10 @@ def update_device_config(hardware_id: str, config_update: DeviceConfig):
     save_device_config(config_update)
     return config_update
 
-@app.post("/setTelemetry")
-def post_telemetry(telemetry: TelemetryIn) -> Dict[str, Any]:
-    # 1. Update Device "Last Seen" and Status
+# Endpoint 2: Send Telemetry
+@app.post("/sendTelemetry")
+def send_telemetry(telemetry: TelemetryIn) -> Dict[str, Any]:
+    # # 1. Update Device "Last Seen" and Status
     # if MONGO_STORAGE:
     #     MONGO_STORAGE.db["devices"].update_one(
     #         {"hardware_id": telemetry.device_id},
@@ -292,9 +286,13 @@ def post_telemetry(telemetry: TelemetryIn) -> Dict[str, Any]:
     
     # if alerts:
     #     queue_notification("warning", "; ".join(alerts), telemetry.device_id)
-    
-    logging.info(telemetry)
-    return {"status": "ok", "alerts": []}
+    #convert telemtryin to a dict and print all its values
+    telemetry_dict = model_to_dict(telemetry)
+    alerts = []
+    logging.info(f"Telemetry received: {telemetry_dict}")
+
+    # logging.info(f"Telemetry received for {telemetry.device_id}")
+    return {"status": "ok", "alerts": alerts}
 
 @app.get("/devices/{hardware_id}/telemetry", response_model=List[TelemetryRecord])
 def list_device_telemetry(hardware_id: str, limit: int = 50):
@@ -306,7 +304,6 @@ def list_device_telemetry(hardware_id: str, limit: int = 50):
             {"device_id": hardware_id}
         ).sort("received_at", -1).limit(limit)
         results = list(cursor)
-        # Convert _id to string or remove it
         for r in results:
             r.pop("_id", None)
         return [TelemetryRecord(**r) for r in results]
@@ -336,5 +333,4 @@ def latest_device_telemetry(hardware_id: str):
 @app.get("/notifications", response_model=List[Notification])
 def list_notifications(limit: int = 50):
     limit = max(1, min(limit, 200))
-    # Combine memory and DB if needed, simplified here to return memory + DB fetch could be added
     return list(notifications)[-limit:]
