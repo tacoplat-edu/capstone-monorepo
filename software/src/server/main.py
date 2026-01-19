@@ -264,34 +264,30 @@ def update_device_config(hardware_id: str, config_update: DeviceConfig):
 # Endpoint 2: Send Telemetry
 @app.post("/sendTelemetry")
 def send_telemetry(telemetry: TelemetryIn) -> Dict[str, Any]:
-    # # 1. Update Device "Last Seen" and Status
-    # if MONGO_STORAGE:
-    #     MONGO_STORAGE.db["devices"].update_one(
-    #         {"hardware_id": telemetry.device_id},
-    #         {"$set": {"last_seen": datetime.utcnow(), "is_online": True}}
-    #     )
+    # 1. Update Device "Last Seen" and Status
+    if MONGO_STORAGE:
+        MONGO_STORAGE.db["devices"].update_one(
+            {"hardware_id": telemetry.device_id},
+            {"$set": {"last_seen": datetime.utcnow(), "is_online": True}}
+        )
 
-    # # 2. Store Telemetry
-    # record = TelemetryRecord(
-    #     **model_to_dict(telemetry),
-    #     received_at=datetime.utcnow(),
-    #     metadata={"processed_by": "plantbox-v2"}
-    # )
-    # telemetry_log.append(record)
-    # store_telemetry(record)
+    # 2. Store Telemetry
+    record = TelemetryRecord(
+        **model_to_dict(telemetry),
+        received_at=datetime.utcnow(),
+        metadata={"processed_by": "plantbox-v2"}
+    )
+    telemetry_log.append(record)
+    store_telemetry(record)
 
-    # # 3. Check Alerts against current config
-    # config = get_or_create_device_config(telemetry.device_id)
-    # alerts = check_alerts(telemetry, config)
+    # 3. Check Alerts against current config
+    config = get_or_create_device_config(telemetry.device_id)
+    alerts = check_alerts(telemetry, config)
     
-    # if alerts:
-    #     queue_notification("warning", "; ".join(alerts), telemetry.device_id)
-    #convert telemtryin to a dict and print all its values
-    telemetry_dict = model_to_dict(telemetry)
-    alerts = []
-    logging.info(f"Telemetry received: {telemetry_dict}")
+    if alerts:
+        queue_notification("warning", "; ".join(alerts), telemetry.device_id)
 
-    # logging.info(f"Telemetry received for {telemetry.device_id}")
+    logging.info(f"Telemetry received for {telemetry.device_id}")
     return {"status": "ok", "alerts": alerts}
 
 @app.get("/devices/{hardware_id}/telemetry", response_model=List[TelemetryRecord])
