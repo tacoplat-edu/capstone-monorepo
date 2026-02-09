@@ -1,16 +1,50 @@
 #include "NetworkClient.h"
 
+// Define the global config variables (now as mutable Strings)
+String DEVICE_ID = "PlantBox-1";
+String BASE_URL = "http://192.168.2.20:8000"; 
+String API_CONFIG;
+String API_TELEMETRY;
+
+void NetworkClient::updateEndpoints() {
+    API_CONFIG = BASE_URL + "/devices/" + DEVICE_ID + "/fetchRefVals";
+    API_TELEMETRY = BASE_URL + "/sendTelemetry";
+}
+
 void NetworkClient::setup() {
-    WiFi.begin(WIFI_SSID, WIFI_PASS);
-    Serial.print("NET: Connecting to WiFi");
-    while (WiFi.status() != WL_CONNECTED) {
-        delay(500);
-        Serial.print(".");
-        digitalWrite(PIN_ONBOARD_LED, !digitalRead(PIN_ONBOARD_LED));
+    WiFiManager wm;
+    preferences.begin("nvs", false); // Open "nvs" namespace in read/write mode
+
+    // 1. Load the last saved Backend IP from memory (default if not found)
+    String savedIP = preferences.getString("backend_ip", "192.168.2.20");
+
+    // 2. Add the custom IP field to the Captive Portal
+    WiFiManagerParameter custom_backend_ip("server", "Backend IP (e.g. 192.168.2.20)", savedIP.c_str(), 40);
+    wm.addParameter(&custom_backend_ip);
+
+    Serial.println("NET: Looking for Wi-Fi...");
+    
+    // 3. Connect or start Portal
+    // If it can't connect, it starts an AP named "PlantBox_Setup"
+    if (!wm.autoConnect("PlantBox_Setup")) {
+        Serial.println("NET: Failed to connect and hit timeout");
+        delay(3000);
+        ESP.restart();
     }
-    Serial.println("\nNET: Connected.");
-    Serial.print("NET: IP Address: ");
-    Serial.println(WiFi.localIP()); 
+
+    // 4. Save the IP if it was changed in the portal
+    String newIP = String(custom_backend_ip.getValue());
+    if (newIP != savedIP) {
+        preferences.putString("backend_ip", newIP);
+        Serial.println("NET: New Backend IP saved to memory.");
+    }
+    
+    BASE_URL = "http://" + newIP + ":8000";
+    updateEndpoints();
+    preferences.end(); // Close preferences
+
+    Serial.println("NET: Connected & Ready.");
+    Serial.println("NET: Backend URL -> " + BASE_URL);
     digitalWrite(PIN_ONBOARD_LED, LOW); 
 }
 

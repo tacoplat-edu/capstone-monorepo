@@ -1,18 +1,13 @@
 #ifndef CONFIG_H
 #define CONFIG_H
 
-// --- Device Identity ---
-inline const char* DEVICE_ID = "PlantBox-1"; // Must match a device in your DB
+#include <Arduino.h>
 
-// --- WiFi Credentials ---
-inline const char* WIFI_SSID = "BELL198";
-inline const char* WIFI_PASS = "39A4F27F563C";
-
-// --- API Endpoints ---
-// Ensure your PC and ESP32 are on the same network.
-inline const String BASE_URL = "http://192.168.2.20:8000";
-inline const String API_CONFIG = BASE_URL + "/devices/" + String(DEVICE_ID) + "/fetchRefVals";
-inline const String API_TELEMETRY = BASE_URL + "/sendTelemetry";
+// --- Device Identity and Settings ---
+extern String DEVICE_ID;
+extern String BASE_URL;
+extern String API_CONFIG;
+extern String API_TELEMETRY;
 
 // --- System Settings ---
 #define SERIAL_BAUD 115200

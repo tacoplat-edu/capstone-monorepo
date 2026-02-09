@@ -5,6 +5,8 @@
 #include <WiFi.h>
 #include <HTTPClient.h>
 #include "Config.h"
+#include <WiFiManager.h> 
+#include <Preferences.h> 
 
 // Mirrors the 'SensorReadings' model in Python
 struct SensorData {
@@ -23,18 +25,16 @@ struct SystemTargets {
 };
 
 class NetworkClient {
-public:
-    void setup();
+    public:
+        void setup();
+        void fetchReferenceValues(SystemTargets &targets); 
+        void sendTelemetryData(SensorData data);
     
-    // Formerly pollBackend: Gets targets/config from API
-    void fetchReferenceValues(SystemTargets &targets); 
+    private:
+        void updateEndpoints(); // Helper to rebuild URL strings
+        unsigned long lastPollTime = 0;
+        unsigned long lastTelemetryTime = 0; 
+        Preferences preferences; // For non-volatile storage
+    };
     
-    // Formerly sendTelemetry: Sends nested JSON
-    void sendTelemetryData(SensorData data);
-
-private:
-    unsigned long lastPollTime = 0;
-    unsigned long lastTelemetryTime = 0; 
-};
-
-#endif
+    #endif
