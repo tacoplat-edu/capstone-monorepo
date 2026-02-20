@@ -3,7 +3,29 @@
 void TemperatureControl::setup() {
     pinMode(PIN_HEATER, OUTPUT);
     pinMode(PIN_FAN, OUTPUT);
+    
+    // DS18B20 initialization
+    oneWire = new OneWire(ONE_WIRE_BUS);
+    sensors = new DallasTemperature(oneWire);
+    sensors->begin();
+    sensors->requestTemperatures();
+    
+    Serial.print("TEMP: DS18B20 devices found: ");
+    Serial.println(sensors->getDeviceCount());
     Serial.println("TEMP: System Initialized.");
+}
+
+float TemperatureControl::getTemperature() {
+    sensors->requestTemperatures();
+    // delay(750);  // DS18B20 conversion time
+    float tempC = sensors->getTempCByIndex(0);
+    
+    if (tempC == DEVICE_DISCONNECTED_C) {
+        Serial.println("TEMP: DS18B20 disconnected - check wiring");
+        return -999.0;  // Error value
+    }
+    
+    return tempC;
 }
 
 void TemperatureControl::loop(float currentTemp, float targetTemp) {

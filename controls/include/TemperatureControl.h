@@ -3,6 +3,8 @@
 
 #include <Arduino.h>
 #include "Config.h"
+#include <OneWire.h>
+#include <DallasTemperature.h> 
 
 class TemperatureControl {
 public:
@@ -12,6 +14,7 @@ public:
     // Getters for Telemetry
     int getHeaterPWM() { return currentHeaterPWM; }
     bool getFanState() { return currentFanState; }
+    float getTemperature();
 
 private:
     // State tracking variables
@@ -29,6 +32,11 @@ private:
 
     // Safety constraints
     float maxRateOfChange = 0.5; // deg C per minute (Report constraint)
+
+    // DS18B20 Sensor (NEW)
+    #define ONE_WIRE_BUS 4  // Yellow wire GPIO - CHANGE IF NEEDED
+    OneWire* oneWire;
+    DallasTemperature* sensors;
 
     void setActuators(int heaterPWM, int fanState);
 };

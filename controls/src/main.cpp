@@ -14,13 +14,6 @@ LightingControl lightControl;
 // --- State Variables ---
 SystemTargets currentTargets; 
 
-// --- Helper for Simulation ---
-float simulateTempSensor() {
-    static float temp = 22.0;
-    temp += ((random(0, 20) - 10) / 100.0);
-    return temp;
-}
-
 void setup() {
     Serial.begin(SERIAL_BAUD);
     pinMode(PIN_ONBOARD_LED, OUTPUT);
@@ -31,6 +24,7 @@ void setup() {
     tempControl.setup();
     fluidControl.setup();
     lightControl.setup();
+    delay(1000);  // Let sensors settle
 
     // Default Targets
     currentTargets.targetTemp = 24.0;
@@ -44,7 +38,7 @@ void loop() {
     // 2. Read Sensors
     // (Simulating the missing sensors to match the Python Data Model)
     SensorData currentReadings;
-    currentReadings.air_temp_c = simulateTempSensor();
+    currentReadings.air_temp_c = tempControl.getTemperature();;
     currentReadings.humidity_pct = 60.0;        // Placeholder
     currentReadings.light_intensity_pct = 85.0; // Placeholder
     currentReadings.water_level_pct = 90.0;     // Placeholder
