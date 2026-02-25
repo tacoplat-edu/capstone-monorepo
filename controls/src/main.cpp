@@ -4,12 +4,14 @@
 #include "TemperatureControl.h"
 #include "FluidControl.h"
 #include "LightingControl.h"
+#include "WaterLevelSensor.h"
 
 // --- Global Objects ---
 NetworkClient network;
 TemperatureControl tempControl;
 FluidControl fluidControl;
 LightingControl lightControl;
+WaterLevelSensor waterLevelSensor;
 
 // --- State Variables ---
 SystemTargets currentTargets; 
@@ -24,6 +26,7 @@ void setup() {
     tempControl.setup();
     fluidControl.setup();
     lightControl.setup();
+    waterLevelSensor.setup();
     delay(1000);  // Let sensors settle
 
     // Default Targets
@@ -41,7 +44,7 @@ void loop() {
     currentReadings.air_temp_c = tempControl.getTemperature();;
     currentReadings.humidity_pct = 60.0;        // Placeholder
     currentReadings.light_intensity_pct = 85.0; // Placeholder
-    currentReadings.water_level_pct = 90.0;     // Placeholder
+    currentReadings.water_level_pct = waterLevelSensor.getWaterLevelPercent();
     currentReadings.nutrient_a_pct = 95.0;      // Placeholder
     currentReadings.moisture_pct = 45.0;        // Placeholder
 
