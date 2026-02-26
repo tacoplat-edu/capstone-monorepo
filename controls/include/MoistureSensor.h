@@ -11,9 +11,8 @@ public:
 
 private:
     // Calibration values for ESP32 12-bit ADC (0-4095)
-    // TODO: Tune these during testing!
-    int airValue = 3400;   // Raw reading when completely dry in the air
-    int waterValue = 1200; // Raw reading when submerged to the line in water
+    int airValue = 2495;   
+    int waterValue = 700;
 };
 
 #endif
