@@ -4,11 +4,9 @@ void TemperatureControl::setup() {
     pinMode(PIN_HEATER, OUTPUT);
     pinMode(PIN_FAN, OUTPUT);
     
-    // DS18B20 initialization
-    oneWire = new OneWire(ONE_WIRE_BUS);
+    oneWire = new OneWire(PIN_TEMP_SENSOR); 
     sensors = new DallasTemperature(oneWire);
     sensors->begin();
-    sensors->requestTemperatures();
     
     Serial.print("TEMP: DS18B20 devices found: ");
     Serial.println(sensors->getDeviceCount());

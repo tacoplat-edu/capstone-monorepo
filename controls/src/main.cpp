@@ -5,6 +5,7 @@
 #include "FluidControl.h"
 #include "LightingControl.h"
 #include "WaterLevelSensor.h"
+#include "MoistureSensor.h" 
 
 // --- Global Objects ---
 NetworkClient network;
@@ -12,6 +13,7 @@ TemperatureControl tempControl;
 FluidControl fluidControl;
 LightingControl lightControl;
 WaterLevelSensor waterLevelSensor;
+MoistureSensor moistureSensor;     
 
 // --- State Variables ---
 SystemTargets currentTargets; 
@@ -27,37 +29,32 @@ void setup() {
     fluidControl.setup();
     lightControl.setup();
     waterLevelSensor.setup();
-    delay(1000);  // Let sensors settle
+    moistureSensor.setup();        
+    delay(1000); 
 
-    // Default Targets
     currentTargets.targetTemp = 24.0;
     currentTargets.triggerWatering = false;
 }
 
 void loop() {
-    // 1. Network: Check for new reference values (Targets)
     network.fetchReferenceValues(currentTargets);
 
-    // 2. Read Sensors
-    // (Simulating the missing sensors to match the Python Data Model)
     SensorData currentReadings;
-    currentReadings.air_temp_c = tempControl.getTemperature();;
-    currentReadings.humidity_pct = 60.0;        // Placeholder
-    currentReadings.light_intensity_pct = 85.0; // Placeholder
+    currentReadings.air_temp_c = tempControl.getTemperature(); 
     currentReadings.water_level_pct = waterLevelSensor.getWaterLevelPercent();
-    currentReadings.nutrient_a_pct = 95.0;      // Placeholder
-    currentReadings.moisture_pct = 45.0;        // Placeholder
+    currentReadings.moisture_pct = moistureSensor.getMoisturePercent(); 
+    
+    // Remaining Placeholders
+    currentReadings.humidity_pct = 60.0;        
+    currentReadings.light_intensity_pct = 85.0; 
+    currentReadings.nutrient_a_pct = 95.0;      
 
-    // 3. Run Control Loops
     tempControl.loop(currentReadings.air_temp_c, currentTargets.targetTemp);
     fluidControl.loop();
     lightControl.loop();
 
-    // 4. Send Telemetry
-    // We now pass the full struct
     network.sendTelemetryData(currentReadings);
 
-    // 5. Handle Triggers from Backend
     if (currentTargets.triggerWatering) {
         fluidControl.triggerWateringCycle();
         currentTargets.triggerWatering = false; 

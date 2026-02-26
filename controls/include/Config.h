@@ -17,7 +17,8 @@ extern String API_TELEMETRY;
 
 // --- Pin Definitions ---
 #define PIN_ONBOARD_LED 2
-#define PIN_TEMP_SENSOR 15
+#define PIN_TEMP_SENSOR 15         // DS18B20 OneWire Bus
+#define PIN_MOISTURE_SENSOR 34     // EK1940 Analog Input (Use an input-only pin like 34, 35, 36, or 39)
 #define PIN_HEATER      12
 #define PIN_FAN         13
 #define PIN_PUMP_WATER     14
