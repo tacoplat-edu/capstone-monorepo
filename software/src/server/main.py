@@ -1,3 +1,4 @@
+# uvicorn main:app
 from __future__ import annotations
 
 import logging
@@ -37,7 +38,6 @@ app = FastAPI(title="Plantbox API", version="0.2.1")
 # --- Default/Fallback Data ---
 DEFAULT_TARGETS = {
     "air_temp": {"min": 18.0, "max": 28.0},
-    "humidity": {"min": 40.0, "max": 80.0},
     "water_level": {"min": 50.0, "max": 100.0},
 }
 
@@ -51,10 +51,6 @@ class TargetRange(BaseModel):
     min: float
     max: float
 
-class DeviceCamera(BaseModel):
-    stream_url: Optional[str] = None
-    snapshot_url: Optional[str] = None
-    enabled: bool = False
 
 # Replaces the old ConfigState to match the new UI/DB schema
 class DeviceConfig(BaseModel):
@@ -68,11 +64,8 @@ class DeviceConfig(BaseModel):
     # Thresholds (Reference Values)
     targets: Dict[str, TargetRange] = {
         "air_temp": TargetRange(**DEFAULT_TARGETS["air_temp"]),
-        "humidity": TargetRange(**DEFAULT_TARGETS["humidity"]),
         "water_level": TargetRange(**DEFAULT_TARGETS["water_level"])
     }
-    
-    camera: DeviceCamera = DeviceCamera()
     
     # Heartbeat tracking
     last_seen: datetime = Field(default_factory=datetime.utcnow)
@@ -82,7 +75,6 @@ class DeviceConfig(BaseModel):
 
 class SensorReadings(BaseModel):
     air_temp_c: float = Field(..., description="Air Temperature in Celsius")
-    humidity_pct: float = Field(..., ge=0, le=100, description="Relative Humidity %")
     light_intensity_pct: float = Field(..., ge=0, le=100, description="Light Sensor Level")
     water_level_pct: float = Field(..., ge=0, le=100, description="Water Level in Reservoir")
     nutrient_a_pct: float = Field(..., ge=0, le=100, description="Nutrient Tank A Level")
@@ -191,11 +183,6 @@ def check_alerts(telemetry: TelemetryIn, config: DeviceConfig) -> List[str]:
        if sensors.air_temp_c < t.min or sensors.air_temp_c > t.max:
            alerts.append(f"Temp {sensors.air_temp_c}°C out of range ({t.min}-{t.max})")
 
-    # Example Check: Humidity
-    if "humidity" in targets:
-       h = targets["humidity"]
-       if sensors.humidity_pct < h.min or sensors.humidity_pct > h.max:
-           alerts.append(f"Humidity {sensors.humidity_pct}% out of range")
 
     # Example Check: Water Level
     if "water_level" in targets:
