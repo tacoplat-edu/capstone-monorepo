@@ -57,6 +57,7 @@ class DeviceConfig(BaseModel):
     hardware_id: str
     display_name: str = "My PlantBox"
     owner_id: str
+    plant_type: str = "other"
     
     # Schedules shown in the UI
     light_schedule: LightSchedule
@@ -227,6 +228,14 @@ MONGO_STORAGE = build_mongo_storage()
 @app.get("/health")
 def health() -> Dict[str, Any]:
     return {"status": "running"}
+
+@app.get("/devices/{hardware_id}/exists")
+def device_exists(hardware_id: str) -> Dict[str, Any]:
+    """Check if a device has been initialized in MongoDB."""
+    if MONGO_STORAGE:
+        data = MONGO_STORAGE.db["devices"].find_one({"hardware_id": hardware_id})
+        return {"exists": data is not None}
+    return {"exists": False}
 
 # Endpoint 1: Fetch Reference Values (Config)
 @app.get("/devices/{hardware_id}/fetchRefVals", response_model=DeviceConfig)

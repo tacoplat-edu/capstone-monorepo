@@ -57,7 +57,79 @@ with st.sidebar:
     if st.button("Refresh Data"):
         st.rerun()
 
-# 2. Fetch Data
+# 2. Check if device is initialized
+exists_path = f"/devices/{device_id}/exists"
+exists_ok, exists_data, exists_err = api_request(server_url, "GET", exists_path)
+
+if not exists_ok:
+    st.error(f"Could not reach server: {exists_err}")
+    st.stop()
+
+# Load plant profiles
+import pathlib
+plants_file = pathlib.Path(__file__).parent / "plants.json"
+with open(plants_file) as f:
+    PLANT_PROFILES = json.load(f)
+
+if not exists_data.get("exists", False):
+    # --- Onboarding Screen ---
+    st.title("🌱 Welcome to PlantBox")
+    st.markdown("Your PlantBox hasn't been set up yet. Let's get started!")
+
+    with st.form("onboarding_form"):
+        st.text_input("PlantBox ID", value=device_id, disabled=True)
+
+        email = st.text_input("Your Email", placeholder="you@example.com")
+
+        # Build searchable plant list
+        plant_keys = list(PLANT_PROFILES.keys())
+        plant_labels = [k.replace("_", " ").title() for k in plant_keys]
+        # Put "Other" at the end
+        other_idx = plant_keys.index("other") if "other" in plant_keys else len(plant_keys) - 1
+
+        selected_label = st.selectbox(
+            "What are you growing?",
+            options=plant_labels,
+            index=0,
+        )
+
+        submitted = st.form_submit_button("Initialize PlantBox")
+
+    if submitted:
+        if not email or not email.strip():
+            st.error("Please enter your email address.")
+            st.stop()
+
+        # Map label back to key
+        selected_idx = plant_labels.index(selected_label)
+        selected_key = plant_keys[selected_idx]
+        profile = PLANT_PROFILES[selected_key]
+
+        display_name = f"My {selected_label}"
+
+        payload = {
+            "hardware_id": device_id,
+            "display_name": display_name,
+            "owner_id": email.strip(),
+            "plant_type": selected_key,
+            "light_schedule": {"start": "06:00:00", "end": "18:00:00"},
+            "targets": {
+                "air_temp": profile["air_temp"],
+            },
+        }
+
+        update_path = f"/devices/{device_id}/config"
+        ok, _, err = api_request(server_url, "POST", update_path, payload)
+        if ok:
+            st.success(f"PlantBox initialized as \"{display_name}\"! Loading dashboard...")
+            time_lib.sleep(1)
+            st.rerun()
+        else:
+            st.error(f"Failed to initialize: {err}")
+
+    st.stop()
+
+# 3. Fetch Data (device exists — show dashboard)
 fetch_config_path = f"/devices/{device_id}/fetchRefVals"
 update_config_path = f"/devices/{device_id}/config"
 telemetry_path = f"/devices/{device_id}/telemetry?limit=50"
