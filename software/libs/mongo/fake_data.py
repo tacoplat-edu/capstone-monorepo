@@ -19,24 +19,19 @@ def clean_database():
     db.notifications.delete_many({})
 
 def create_mock_device():
-    print("🌱 Creating device: PlantBox-492 (My Basil)...")
+    print("🌱 Creating device: PlantBox-1 (My Basil)...")
     
     device_data = {
-        "hardware_id": "PlantBox-492",
-        "display_name": "My Basil",
+        "hardware_id": "PlantBox-1",
+        "display_name": "My Lettuce",
         "owner_id": "user_123", # Mock user ID
         "light_schedule": {
             "start": "06:00:00",
             "end": "18:00:00"
         },
         "targets": {
-            "air_temp": {"min": 18.0, "max": 26.0},
-            "humidity": {"min": 40.0, "max": 70.0},
+            "air_temp": {"min": 22.0, "max": 26.0},
             "water_level": {"min": 50.0, "max": 100.0}
-        },
-        "camera": {
-            "enabled": True,
-            "stream_url": "http://placeholder-video-stream"
         },
         # Set last_seen to now so it appears "Online"
         "last_seen": datetime.utcnow(),
@@ -45,7 +40,7 @@ def create_mock_device():
     }
     
     db.devices.update_one(
-        {"hardware_id": "PlantBox-492"},
+        {"hardware_id": "PlantBox-1"},
         {"$set": device_data},
         upsert=True
     )
@@ -81,11 +76,10 @@ def generate_telemetry_history():
         hours_passed = (current_time - start_time).total_seconds() / 3600
         water_level = 85.0 - (hours_passed * 0.2)
         
-        # 4. Humidity: Inverse to temperature usually
-        humidity = 60 - temp_fluctuation + random.uniform(-2, 2)
+
 
         record = {
-            "device_id": "PlantBox-492",
+            "device_id": "PlantBox-1",
             "received_at": current_time,
             "captured_at": current_time,
             "metadata": {
@@ -93,17 +87,16 @@ def generate_telemetry_history():
             },
             "sensors": {
                 "air_temp_c": round(air_temp, 1),
-                "humidity_pct": round(humidity, 1),
                 "light_intensity_pct": round(light_pct, 1),
                 "water_level_pct": round(water_level, 1),
                 "nutrient_a_pct": 92.0, # Static for now
-                "flow_rate_lpm": 1.0
+                "moisture_pct": 55.0
             }
         }
         records.append(record)
         
-        # Increment by 10 minutes
-        current_time += timedelta(minutes=10)
+        # Increment by 5 minutes
+        current_time += timedelta(minutes=5)
         
     if records:
         db.telemetry.insert_many(records)

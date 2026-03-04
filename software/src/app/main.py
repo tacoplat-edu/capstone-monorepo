@@ -1,3 +1,4 @@
+# streamlit run main.py
 from __future__ import annotations
 
 import json
@@ -11,9 +12,9 @@ import pandas as pd
 import streamlit as st
 
 # --- Configuration ---
-DEFAULT_SERVER_URL = os.getenv("PLANTBOX_SERVER_URL", "http://localhost:8000")
+DEFAULT_SERVER_URL = os.getenv("PLANTBOX_SERVER_URL", "http://127.0.0.1:8000")
 # We default to the ID used in your seed script
-DEFAULT_DEVICE_ID = os.getenv("PLANTBOX_DEVICE_ID", "PlantBox-492")
+DEFAULT_DEVICE_ID = os.getenv("PLANTBOX_DEVICE_ID", "PlantBox-1")
 
 # --- Helper Functions ---
 
@@ -57,10 +58,11 @@ with st.sidebar:
         st.rerun()
 
 # 2. Fetch Data
-config_path = f"/devices/{device_id}/config"
+fetch_config_path = f"/devices/{device_id}/fetchRefVals"
+update_config_path = f"/devices/{device_id}/config"
 telemetry_path = f"/devices/{device_id}/telemetry?limit=50"
 
-config_ok, device_config, config_err = api_request(server_url, "GET", config_path)
+config_ok, device_config, config_err = api_request(server_url, "GET", fetch_config_path)
 telemetry_ok, telemetry_data, telemetry_err = api_request(server_url, "GET", telemetry_path)
 
 if not config_ok:
@@ -76,14 +78,6 @@ status_color = "green" if is_online else "red"
 status_text = "PlantBox Active" if is_online else "Offline"
 st.markdown(f":{status_color}[● {status_text}]")
 
-# 4. Live Camera View (Placeholder)
-if device_config.get("camera", {}).get("enabled"):
-    st.image(
-        "https://images.unsplash.com/photo-1550989460-0adf9ea622e2?q=80&w=1000&auto=format&fit=crop", 
-        caption="Live Feed (Mock)", 
-        use_container_width=True
-    )
-
 # 5. Sensor Cards (The "Fresh Data")
 # We get the latest reading from the list (the API returns newest first or last depending on sort)
 # Our API returns newest LAST in the list for graphing, so we take [-1]
@@ -92,18 +86,13 @@ latest = telemetry_data[-1] if (telemetry_ok and telemetry_data) else None
 if latest:
     sensors = latest.get("sensors", {})
     
-    # Top Row: Temp & Humidity
-    col1, col2 = st.columns(2)
+    # Top Row: Temp, Light & Schedule
+    col1, col2, col3 = st.columns(3)
     with col1:
         st.metric("Air Temp", f"{sensors.get('air_temp_c')}°C")
     with col2:
-        st.metric("Humidity", f"{sensors.get('humidity_pct')}%")
-
-    # Middle Row: Light & Schedule
-    col3, col4 = st.columns(2)
-    with col3:
         st.metric("Light Intensity", f"{sensors.get('light_intensity_pct')}%")
-    with col4:
+    with col3:
         # Display Schedule nicely
         schedule = device_config.get("light_schedule", {})
         start = schedule.get("start", "06:00")[:5] # strip seconds
@@ -144,37 +133,65 @@ if telemetry_ok and telemetry_data:
     # Draw charts
     tab1, tab2 = st.tabs(["Environment", "Resources"])
     with tab1:
-        st.line_chart(df[["air_temp_c", "humidity_pct", "light_intensity_pct"]])
+        st.line_chart(df[["air_temp_c", "light_intensity_pct"]])
     with tab2:
         st.line_chart(df[["water_level_pct", "nutrient_a_pct"]])
 
 # 7. Settings Form (Updated for new schema)
 with st.expander("Device Settings"):
     with st.form("settings_form"):
-        st.write("Target Ranges")
+        st.subheader("Target Ranges")
+        
+        # Get defaults safely
         targets = device_config.get("targets", {})
-        
-        # Temp Settings
-        t_min = st.number_input("Min Temp (°C)", value=targets.get("air_temp", {}).get("min", 18.0))
-        t_max = st.number_input("Max Temp (°C)", value=targets.get("air_temp", {}).get("max", 28.0))
-        
-        # Schedule Settings
-        st.write("Light Schedule")
+        def get_target(key, param, default):
+            # Safe float conversion
+            val = targets.get(key, {}).get(param, default)
+            return float(val)
+
+        st.markdown("#### Air Temp (°C)")
+        t_min = st.number_input("Min", value=get_target("air_temp", "min", 18.0), key="t_min")
+        t_max = st.number_input("Max", value=get_target("air_temp", "max", 28.0), key="t_max")
+
+        st.markdown("#### Water Level (%)")
+        w_min = st.number_input("Min Level", value=get_target("water_level", "min", 50.0), key="w_min")
+        w_max = st.number_input("Max Level", value=get_target("water_level", "max", 100.0), key="w_max")
+
+        st.divider()
+        st.subheader("Light Schedule")
         sch = device_config.get("light_schedule", {})
-        s_start = st.time_input("Start Time", value=parse_time_str(sch.get("start", "06:00:00")))
-        s_end = st.time_input("End Time", value=parse_time_str(sch.get("end", "18:00:00")))
+        
+        col_c, col_d = st.columns(2)
+        with col_c:
+            s_start = st.time_input("Start Time", value=parse_time_str(sch.get("start", "06:00:00")))
+        with col_d:
+            s_end = st.time_input("End Time", value=parse_time_str(sch.get("end", "18:00:00")))
         
         if st.form_submit_button("Save Changes"):
-            # Construct the payload matching DeviceConfig model
-            payload = device_config.copy()
+            # Deep copy to avoid mutating the original reference before send
+            payload = json.loads(json.dumps(device_config))
+            
+            # Ensure keys exist
+            if "targets" not in payload: payload["targets"] = {}
+            
+            # Update Temp
+            if "air_temp" not in payload["targets"]: payload["targets"]["air_temp"] = {}
             payload["targets"]["air_temp"]["min"] = t_min
             payload["targets"]["air_temp"]["max"] = t_max
+
+            # Update Water
+            if "water_level" not in payload["targets"]: payload["targets"]["water_level"] = {}
+            payload["targets"]["water_level"]["min"] = w_min
+            payload["targets"]["water_level"]["max"] = w_max
+            
+            # Update Schedule
+            if "light_schedule" not in payload: payload["light_schedule"] = {}
             payload["light_schedule"]["start"] = s_start.strftime("%H:%M:%S")
             payload["light_schedule"]["end"] = s_end.strftime("%H:%M:%S")
             
-            success, _, err = api_request(server_url, "POST", config_path, payload)
+            success, _, err = api_request(server_url, "POST", update_config_path, payload)
             if success:
-                st.success("Settings saved!")
+                st.success("Settings saved to MongoDB!")
                 time_lib.sleep(1)
                 st.rerun()
             else:
