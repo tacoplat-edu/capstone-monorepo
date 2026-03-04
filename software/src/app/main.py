@@ -150,6 +150,7 @@ status_color = "green" if is_online else "red"
 status_text = "PlantBox Active" if is_online else "Offline"
 st.markdown(f":{status_color}[● {status_text}]")
 
+
 # 5. Sensor Cards (The "Fresh Data")
 # We get the latest reading from the list (the API returns newest first or last depending on sort)
 # Our API returns newest LAST in the list for graphing, so we take [-1]
@@ -208,6 +209,30 @@ if telemetry_ok and telemetry_data:
         st.line_chart(df[["air_temp_c", "light_intensity_pct"]])
     with tab2:
         st.line_chart(df[["water_level_pct", "nutrient_a_pct"]])
+
+# --- Demo Controls ---
+demo_path = f"/devices/{device_id}/demo_control"
+demo_ok, demo_data, demo_err = api_request(server_url, "GET", demo_path)
+demo_state = demo_data if demo_ok else {}
+
+st.subheader("🎛️ Demo Controls")
+dc1, dc2, dc3 = st.columns(3)
+
+with dc1:
+    heater_on = st.toggle("🔥 Heater", value=demo_state.get("heater", False), key="demo_heater")
+with dc2:
+    water_on = st.toggle("💧 Water Pump", value=demo_state.get("water_pump", False), key="demo_water")
+with dc3:
+    nutrient_on = st.toggle("🧪 Nutrient Mixer", value=demo_state.get("nutrient_mixer", False), key="demo_nutrient")
+
+# Detect if any toggle changed and push the update
+new_demo = {"heater": heater_on, "water_pump": water_on, "nutrient_mixer": nutrient_on}
+if new_demo != {k: demo_state.get(k, False) for k in ("heater", "water_pump", "nutrient_mixer")}:
+    ok, _, err = api_request(server_url, "POST", demo_path, new_demo)
+    if ok:
+        st.toast("Actuator state updated!", icon="✅")
+    else:
+        st.error(f"Failed to update actuator: {err}")
 
 # 7. Settings Form (Updated for new schema)
 with st.expander("Device Settings"):

@@ -90,6 +90,13 @@ class TelemetryRecord(TelemetryIn):
     received_at: datetime
     metadata: Dict[str, Any] = {} 
 
+class DemoControl(BaseModel):
+    hardware_id: str
+    heater: bool = False
+    water_pump: bool = False
+    nutrient_mixer: bool = False
+    updated_at: datetime = Field(default_factory=datetime.utcnow)
+
 class Notification(BaseModel):
     id: str
     level: str
@@ -358,3 +365,35 @@ def latest_device_telemetry(hardware_id: str):
 def list_notifications(limit: int = 50):
     limit = max(1, min(limit, 200))
     return list(notifications)[-limit:]
+
+# --- Demo Control Endpoints ---
+
+@app.get("/devices/{hardware_id}/demo_control", response_model=DemoControl)
+def get_demo_control(hardware_id: str):
+    """Fetch the current demo actuator states from the demo_control collection."""
+    if MONGO_STORAGE:
+        data = MONGO_STORAGE.db["demo_control"].find_one({"hardware_id": hardware_id})
+        if data:
+            data.pop("_id", None)
+            return DemoControl(**data)
+    # Return defaults if no document exists
+    return DemoControl(hardware_id=hardware_id)
+
+@app.post("/devices/{hardware_id}/demo_control", response_model=DemoControl)
+def update_demo_control(hardware_id: str, payload: Dict[str, Any]):
+    """Update actuator toggle states in the demo_control collection."""
+    # Build the update from current state + incoming changes
+    existing = get_demo_control(hardware_id)
+    existing_data = model_to_dict(existing)
+    updated_data = deep_merge(payload, existing_data)
+    updated_data["hardware_id"] = hardware_id
+    updated_data["updated_at"] = datetime.utcnow()
+
+    if MONGO_STORAGE:
+        MONGO_STORAGE.db["demo_control"].update_one(
+            {"hardware_id": hardware_id},
+            {"$set": updated_data},
+            upsert=True
+        )
+
+    return DemoControl(**updated_data)
