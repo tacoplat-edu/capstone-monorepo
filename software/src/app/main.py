@@ -140,6 +140,10 @@ if telemetry_ok and telemetry_data:
 # 7. Settings Form (Updated for new schema)
 with st.expander("Device Settings"):
     with st.form("settings_form"):
+        st.subheader("Plant Name")
+        plant_name = st.text_input("Display Name", value=device_config.get("display_name", "My PlantBox"))
+
+        st.divider()
         st.subheader("Target Ranges")
         
         # Get defaults safely
@@ -150,12 +154,12 @@ with st.expander("Device Settings"):
             return float(val)
 
         st.markdown("#### Air Temp (°C)")
-        t_min = st.number_input("Min", value=get_target("air_temp", "min", 18.0), key="t_min")
-        t_max = st.number_input("Max", value=get_target("air_temp", "max", 28.0), key="t_max")
+        t_min = st.number_input("Min", value=get_target("air_temp", "min", 18.0), step=0.25, key="t_min")
+        t_max = st.number_input("Max", value=get_target("air_temp", "max", 28.0), step=0.25, key="t_max")
 
         st.markdown("#### Water Level (%)")
-        w_min = st.number_input("Min Level", value=get_target("water_level", "min", 50.0), key="w_min")
-        w_max = st.number_input("Max Level", value=get_target("water_level", "max", 100.0), key="w_max")
+        w_min = st.number_input("Min Level", value=get_target("water_level", "min", 50.0), step=1.0, key="w_min")
+        w_max = st.number_input("Max Level", value=get_target("water_level", "max", 100.0), step=1.0, key="w_max")
 
         st.divider()
         st.subheader("Light Schedule")
@@ -170,6 +174,9 @@ with st.expander("Device Settings"):
         if st.form_submit_button("Save Changes"):
             # Deep copy to avoid mutating the original reference before send
             payload = json.loads(json.dumps(device_config))
+            
+            # Update Plant Name
+            payload["display_name"] = plant_name
             
             # Ensure keys exist
             if "targets" not in payload: payload["targets"] = {}
