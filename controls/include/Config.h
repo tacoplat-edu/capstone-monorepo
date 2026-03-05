@@ -8,6 +8,7 @@ extern String DEVICE_ID;
 extern String BASE_URL;
 extern String API_CONFIG;
 extern String API_TELEMETRY;
+extern String API_DEMO_CONTROL;
 
 // --- System Settings ---
 #define SERIAL_BAUD 115200
