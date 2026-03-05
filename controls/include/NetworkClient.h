@@ -24,16 +24,25 @@ struct SystemTargets {
     bool triggerWatering; 
 };
 
+struct DemoState {
+    bool demo_enabled = false;
+    bool heater = false;
+    bool water_pump = false;
+    bool nutrient_mixer = false;
+};
+
 class NetworkClient {
     public:
         void setup();
         void fetchReferenceValues(SystemTargets &targets); 
         void sendTelemetryData(SensorData data);
+        void fetchDemoControl(DemoState &state);
     
     private:
         void updateEndpoints(); // Helper to rebuild URL strings
         unsigned long lastPollTime = 0;
-        unsigned long lastTelemetryTime = 0; 
+        unsigned long lastTelemetryTime = 0;
+        unsigned long lastDemoPollTime = 0;
         Preferences preferences; // For non-volatile storage
     };
     

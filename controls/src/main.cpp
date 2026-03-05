@@ -17,6 +17,7 @@ MoistureSensor moistureSensor;
 
 // --- State Variables ---
 SystemTargets currentTargets; 
+DemoState demoState;
 
 void setup() {
     Serial.begin(SERIAL_BAUD);
@@ -38,6 +39,7 @@ void setup() {
 
 void loop() {
     network.fetchReferenceValues(currentTargets);
+    network.fetchDemoControl(demoState);
 
     SensorData currentReadings;
     currentReadings.air_temp_c = tempControl.getTemperature(); 
@@ -49,16 +51,24 @@ void loop() {
     currentReadings.light_intensity_pct = 85.0; 
     currentReadings.nutrient_a_pct = 95.0;      
 
-    tempControl.loop(currentReadings.air_temp_c, currentTargets.targetTemp);
-    fluidControl.loop();
+    if (demoState.demo_enabled) {
+        // Demo mode: override targets with high values to activate actuators
+        tempControl.loop(currentReadings.air_temp_c, 50.0);
+        fluidControl.triggerWateringCycle();
+    } else {
+        // Normal control logic
+        tempControl.loop(currentReadings.air_temp_c, currentTargets.targetTemp);
+        fluidControl.loop();
+
+        if (currentTargets.triggerWatering) {
+            fluidControl.triggerWateringCycle();
+            currentTargets.triggerWatering = false; 
+        }
+    }
+
     lightControl.loop();
 
     network.sendTelemetryData(currentReadings);
-
-    if (currentTargets.triggerWatering) {
-        fluidControl.triggerWateringCycle();
-        currentTargets.triggerWatering = false; 
-    }
 
     delay(CONTROL_LOOP_DELAY_MS);
 }

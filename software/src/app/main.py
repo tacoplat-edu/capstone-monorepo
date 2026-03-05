@@ -216,8 +216,10 @@ demo_ok, demo_data, demo_err = api_request(server_url, "GET", demo_path)
 demo_state = demo_data if demo_ok else {}
 
 st.subheader("🎛️ Demo Controls")
-dc1, dc2, dc3 = st.columns(3)
+dc0, dc1, dc2, dc3 = st.columns(4)
 
+with dc0:
+    demo_enabled = st.toggle("🚀 Demo Mode", value=demo_state.get("demo_enabled", False), key="demo_enabled")
 with dc1:
     heater_on = st.toggle("🔥 Heater", value=demo_state.get("heater", False), key="demo_heater")
 with dc2:
@@ -226,8 +228,8 @@ with dc3:
     nutrient_on = st.toggle("🧪 Nutrient Mixer", value=demo_state.get("nutrient_mixer", False), key="demo_nutrient")
 
 # Detect if any toggle changed and push the update
-new_demo = {"heater": heater_on, "water_pump": water_on, "nutrient_mixer": nutrient_on}
-if new_demo != {k: demo_state.get(k, False) for k in ("heater", "water_pump", "nutrient_mixer")}:
+new_demo = {"demo_enabled": demo_enabled, "heater": heater_on, "water_pump": water_on, "nutrient_mixer": nutrient_on}
+if new_demo != {k: demo_state.get(k, False) for k in ("demo_enabled", "heater", "water_pump", "nutrient_mixer")}:
     ok, _, err = api_request(server_url, "POST", demo_path, new_demo)
     if ok:
         st.toast("Actuator state updated!", icon="✅")

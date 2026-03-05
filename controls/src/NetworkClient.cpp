@@ -5,10 +5,12 @@ String DEVICE_ID = "PlantBox-1";
 String BASE_URL = "http://192.168.2.20:8000"; 
 String API_CONFIG;
 String API_TELEMETRY;
+String API_DEMO_CONTROL;
 
 void NetworkClient::updateEndpoints() {
     API_CONFIG = BASE_URL + "/devices/" + DEVICE_ID + "/fetchRefVals";
     API_TELEMETRY = BASE_URL + "/sendTelemetry";
+    API_DEMO_CONTROL = BASE_URL + "/devices/" + DEVICE_ID + "/demo_control";
 }
 
 void NetworkClient::setup() {
@@ -131,6 +133,36 @@ void NetworkClient::sendTelemetryData(SensorData data) {
             http.end();
         } else {
             Serial.println("NET: Unable to connect to telemetry server");
+        }
+    }
+}
+
+void NetworkClient::fetchDemoControl(DemoState &state) {
+    if (millis() - lastDemoPollTime < POLL_INTERVAL_MS) return;
+    lastDemoPollTime = millis();
+
+    if (WiFi.status() == WL_CONNECTED) {
+        WiFiClient client;
+        HTTPClient http;
+
+        if (http.begin(client, API_DEMO_CONTROL)) {
+            int httpCode = http.GET();
+
+            if (httpCode > 0) {
+                String payload = http.getString();
+                Serial.println("NET: Demo Control Received: " + payload);
+
+                // Simple JSON boolean parsing (no ArduinoJson dependency)
+                state.demo_enabled  = (payload.indexOf("\"demo_enabled\": true")  >= 0) || (payload.indexOf("\"demo_enabled\":true")  >= 0);
+                state.heater        = (payload.indexOf("\"heater\": true")        >= 0) || (payload.indexOf("\"heater\":true")        >= 0);
+                state.water_pump    = (payload.indexOf("\"water_pump\": true")    >= 0) || (payload.indexOf("\"water_pump\":true")    >= 0);
+                state.nutrient_mixer = (payload.indexOf("\"nutrient_mixer\": true") >= 0) || (payload.indexOf("\"nutrient_mixer\":true") >= 0);
+            } else {
+                Serial.printf("NET: Demo GET Error: %s\n", http.errorToString(httpCode).c_str());
+            }
+            http.end();
+        } else {
+            Serial.println("NET: Unable to connect to demo control endpoint");
         }
     }
 }
