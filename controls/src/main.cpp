@@ -1,80 +1,31 @@
+// ============================================================
+// PUMP TEST: AD20P-1230A on PIN_PUMP_WATER (GPIO 14)
+// Turns the pump ON for 3 seconds, then OFF for 3 seconds.
+// ============================================================
 #include <Arduino.h>
 #include "Config.h"
-#include "NetworkClient.h"
-#include "TemperatureControl.h"
-#include "FluidControl.h"
-#include "LightingControl.h"
-#include "WaterLevelSensor.h"
-#include "MoistureSensor.h" 
-
-// --- Global Objects ---
-NetworkClient network;
-TemperatureControl tempControl;
-FluidControl fluidControl;
-LightingControl lightControl;
-WaterLevelSensor waterLevelSensor;
-MoistureSensor moistureSensor;     
-
-// --- State Variables ---
-SystemTargets currentTargets; 
-DemoState demoState;
 
 void setup() {
     Serial.begin(SERIAL_BAUD);
-    pinMode(PIN_ONBOARD_LED, OUTPUT);
-
-    Serial.println("--- PLANTBOX FIRMWARE STARTING ---");
-
-    network.setup();
-    tempControl.setup();
-    fluidControl.setup();
-    lightControl.setup();
-    waterLevelSensor.setup();
-    moistureSensor.setup();        
-    delay(1000); 
-
-    currentTargets.targetTemp = 24.0;
-    currentTargets.triggerWatering = false;
+    pinMode(PIN_PUMP_WATER, OUTPUT);
+    digitalWrite(PIN_PUMP_WATER, LOW);
+    delay(1000);
+    Serial.println("--- PUMP TEST: AD20P-1230A ---");
 }
 
 void loop() {
-    network.fetchReferenceValues(currentTargets);
-    network.fetchDemoControl(demoState);
+    Serial.println("PUMP ON");
+    digitalWrite(PIN_PUMP_WATER, HIGH);
+    delay(3000);
 
-    SensorData currentReadings;
-    currentReadings.air_temp_c = tempControl.getTemperature(); 
-    currentReadings.water_level_pct = waterLevelSensor.getWaterLevelPercent();
-    currentReadings.moisture_pct = moistureSensor.getMoisturePercent(); 
-    
-    // Remaining Placeholders
-    currentReadings.humidity_pct = 60.0;        
-    currentReadings.light_intensity_pct = 85.0; 
-    currentReadings.nutrient_a_pct = 95.0;      
-
-    if (demoState.demo_enabled) {
-        // Demo mode: override targets with high values to activate actuators
-        tempControl.loop(currentReadings.air_temp_c, 50.0);
-        fluidControl.triggerWateringCycle();
-    } else {
-        // Normal control logic
-        tempControl.loop(currentReadings.air_temp_c, currentTargets.targetTemp);
-        fluidControl.loop();
-
-        if (currentTargets.triggerWatering) {
-            fluidControl.triggerWateringCycle();
-            currentTargets.triggerWatering = false; 
-        }
-    }
-
-    lightControl.loop();
-
-    network.sendTelemetryData(currentReadings);
-
-    delay(CONTROL_LOOP_DELAY_MS);
+    Serial.println("PUMP OFF");
+    digitalWrite(PIN_PUMP_WATER, LOW);
+    delay(3000);
 }
 
-
-
+// ============================================================
+// ORIGINAL PLANTBOX FIRMWARE (commented out for pump testing)
+// ============================================================
 
 
 // for testing 3 sensors:

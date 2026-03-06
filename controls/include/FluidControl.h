@@ -16,6 +16,7 @@ public:
 private:
     bool isWatering = false;
     int cycleStep = 0;
+    int prevStep = -1;
     unsigned long stepStartTime = 0;
 
     void stopAll();
