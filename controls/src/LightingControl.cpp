@@ -2,24 +2,23 @@
 
 void LightingControl::setup() {
     pinMode(PIN_GROW_LIGHTS, OUTPUT);
-    Serial.println("LIGHT: System Initialized.");
+    digitalWrite(PIN_GROW_LIGHTS, LOW);
+    Serial.println("LIGHT: LED Grow Lights Initialized.");
 }
 
 void LightingControl::loop() {
-    // In a real scenario, you need an NTP Client or RTC module to get real time.
-    // For simulation, we will simply toggle lights based on a timer
-
-    // Simulate "Day" is 10 seconds, "Night" is 10 seconds
+    // TODO: Replace with NTP or RTC for real day/night schedule.
+    // Current placeholder: 10s ON / 10s OFF cycle for testing.
     unsigned long timeVal = millis() / 1000;
     bool shouldBeOn = (timeVal % 20) < 10;
 
     if (shouldBeOn && !lightsOn) {
         lightsOn = true;
-        Serial.println("LIGHT: Turning ON (Simulated Day)");
-        // digitalWrite(PIN_GROW_LIGHTS, HIGH);
+        digitalWrite(PIN_GROW_LIGHTS, HIGH);
+        Serial.println("LIGHT: Grow Lights ON");
     } else if (!shouldBeOn && lightsOn) {
         lightsOn = false;
-        Serial.println("LIGHT: Turning OFF (Simulated Night)");
-        // digitalWrite(PIN_GROW_LIGHTS, LOW);
+        digitalWrite(PIN_GROW_LIGHTS, LOW);
+        Serial.println("LIGHT: Grow Lights OFF");
     }
 }
