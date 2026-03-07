@@ -1,3 +1,5 @@
+// pin 14 - PUMP1_EN
+// pin 12 - SOL_EN
 #include <Arduino.h>
 #include "Config.h"
 #include "NetworkClient.h"
