@@ -29,4 +29,8 @@ extern String API_DEMO_CONTROL;
 #define PIN_FLOW_SENSOR    33
 #define PIN_GROW_LIGHTS    32
 
+// --- I2C Pins (MS5837 Pressure Sensor) ---
+#define PIN_I2C_SDA        21
+#define PIN_I2C_SCL        22
+
 #endif

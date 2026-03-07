@@ -19,13 +19,15 @@ MoistureSensor moistureSensor;
 SystemTargets currentTargets;
 DemoState demoState;
 
+#define DEBUG true
+
 void setup() {
     Serial.begin(SERIAL_BAUD);
     pinMode(PIN_ONBOARD_LED, OUTPUT);
 
     Serial.println("--- PLANTBOX FIRMWARE STARTING ---");
 
-    network.setup();
+    // network.setup();
     tempControl.setup();
     fluidControl.setup();
     lightControl.setup();
@@ -38,8 +40,16 @@ void setup() {
 }
 
 void loop() {
-    network.fetchReferenceValues(currentTargets);
-    network.fetchDemoControl(demoState);
+    if (DEBUG) {
+        // test water level sensor
+        float waterLevel = waterLevelSensor.getWaterLevelPercent();
+
+        Serial.print("Water Level: ");
+        Serial.println(waterLevel);
+
+    }
+    else {
+
 
     SensorData currentReadings;
     currentReadings.air_temp_c = tempControl.getTemperature();
@@ -83,6 +93,6 @@ void loop() {
     lightControl.loop();
 
     network.sendTelemetryData(currentReadings);
-
+    }
     delay(CONTROL_LOOP_DELAY_MS);
 }

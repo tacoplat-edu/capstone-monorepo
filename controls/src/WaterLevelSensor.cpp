@@ -1,8 +1,9 @@
 // WaterLevelSensor.cpp
 #include "WaterLevelSensor.h"
+#include "Config.h"
 
 void WaterLevelSensor::setup() {
-    Wire.begin();
+    Wire.begin(PIN_I2C_SDA, PIN_I2C_SCL);
 
     // Identify correct model (02BA for your module)[web:24]
     sensor.setModel(MS5837::MS5837_02BA);
