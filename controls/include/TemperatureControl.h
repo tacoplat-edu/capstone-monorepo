@@ -10,6 +10,7 @@ class TemperatureControl {
 public:
     void setup();
     void loop(float currentTemp, float targetTemp);
+    void setActuators(int heaterPWM, int fanState);
     
     int getHeaterPWM() { return currentHeaterPWM; }
     bool getFanState() { return currentFanState; }
@@ -30,8 +31,6 @@ private:
 
     OneWire* oneWire;
     DallasTemperature* sensors;
-
-    void setActuators(int heaterPWM, int fanState);
 };
 
 #endif

@@ -22,3 +22,9 @@ void LightingControl::loop() {
         Serial.println("LIGHT: Grow Lights OFF");
     }
 }
+
+void LightingControl::setLight(bool on) {
+    lightsOn = on;
+    digitalWrite(PIN_GROW_LIGHTS, on ? HIGH : LOW);
+    Serial.printf("LIGHT: Grow Lights %s\n", on ? "ON" : "OFF");
+}
