@@ -1,4 +1,4 @@
-# uvicorn main:app
+# uvicorn main:app --host 0.0.0.0 --port 8000
 from __future__ import annotations
 
 import logging
@@ -12,6 +12,10 @@ from uuid import uuid4
 
 from fastapi import FastAPI, HTTPException, Header, Depends
 from pydantic import BaseModel, Field
+
+import dotenv
+dotenv.load_dotenv()
+
 
 # --- Path Setup ---
 ROOT = Path(__file__).resolve().parents[2]
@@ -76,8 +80,9 @@ class DeviceConfig(BaseModel):
 
 class SensorReadings(BaseModel):
     air_temp_c: float = Field(..., description="Air Temperature in Celsius")
+    humidity_pct: float = Field(0.0, ge=0, le=100, description="Relative Humidity")
     light_intensity_pct: float = Field(..., ge=0, le=100, description="Light Sensor Level")
-    water_level_pct: float = Field(..., ge=0, le=100, description="Water Level in Reservoir")
+    water_level_pct: float = Field(..., ge=-1, le=100, description="Water Level in Reservoir (-1 = no reading)")
     nutrient_a_pct: float = Field(..., ge=0, le=100, description="Nutrient Tank A Level")
     moisture_pct: float = Field(..., ge=0, le=100, description="Moisture Sensor Level")
 
@@ -96,6 +101,7 @@ class DemoControl(BaseModel):
     heater: bool = False
     water_pump: bool = False
     nutrient_mixer: bool = False
+    grow_lights: bool = False
     updated_at: datetime = Field(default_factory=datetime.utcnow)
 
 class Notification(BaseModel):

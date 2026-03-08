@@ -29,6 +29,7 @@ struct DemoState {
     bool heater = false;
     bool water_pump = false;
     bool nutrient_mixer = false;
+    bool grow_lights = false;
 };
 
 class NetworkClient {

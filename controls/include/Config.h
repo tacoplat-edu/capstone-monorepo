@@ -14,18 +14,18 @@ extern String API_DEMO_CONTROL;
 #define SERIAL_BAUD 115200
 #define POLL_INTERVAL_MS 5000     
 #define TELEMETRY_INTERVAL_MS 10000 
-#define CONTROL_LOOP_DELAY_MS 100 
+#define CONTROL_LOOP_DELAY_MS 50
 
 // --- Pin Definitions ---
 #define PIN_ONBOARD_LED 2
 #define PIN_TEMP_SENSOR 15         // DS18B20 OneWire Bus
 #define PIN_MOISTURE_SENSOR 34     // EK1940 Analog Input (Use an input-only pin like 34, 35, 36, or 39)
-#define PIN_HEATER      12
-#define PIN_FAN         13
+#define PIN_HEATER      25
+#define PIN_FAN         12
 #define PIN_PUMP_WATER     14
 #define PIN_PUMP_NUTRIENT  27
 #define PIN_VALVE_MAIN     26
-#define PIN_MIXER_MOTOR    25
+#define PIN_MIXER_MOTOR    4
 #define PIN_FLOW_SENSOR    33
 #define PIN_GROW_LIGHTS    32
 

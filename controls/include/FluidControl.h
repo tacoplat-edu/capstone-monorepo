@@ -5,7 +5,7 @@
 #include "Config.h"
 
 // --- Mixer Motor PWM Configuration ---
-#define MIXER_PWM_CHANNEL    1       // LEDC channel (avoid 0 if used elsewhere)
+#define MIXER_PWM_CHANNEL    2       // LEDC channel 2 (channels 0-1 share Timer 0 with heater)
 #define MIXER_PWM_FREQ       25000   // 25 kHz — above audible range
 #define MIXER_PWM_RESOLUTION 8       // 8-bit → duty 0–255
 
