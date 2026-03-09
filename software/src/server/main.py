@@ -98,6 +98,7 @@ class TelemetryRecord(TelemetryIn):
 class DemoControl(BaseModel):
     hardware_id: str
     demo_enabled: bool = False
+    low_power_mode: bool = False
     heater: bool = False
     water_pump: bool = False
     nutrient_mixer: bool = False

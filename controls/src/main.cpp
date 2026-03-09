@@ -6,6 +6,8 @@
 #include "LightingControl.h"
 #include "WaterLevelSensor.h"
 #include "MoistureSensor.h"
+#include "PowerMonitor.h"
+#include <Wire.h>
 
 // --- Global Objects ---
 NetworkClient network;
@@ -14,12 +16,14 @@ FluidControl fluidControl;
 LightingControl lightControl;
 WaterLevelSensor waterLevelSensor;
 MoistureSensor moistureSensor;
+PowerMonitor powerMon40(0x40, 0.01f);   // R9: 10 mΩ shunt
+PowerMonitor powerMon41(0x41, 0.002f);  // R4: 2 mΩ shunt
 
 // --- State Variables ---
 SystemTargets currentTargets;
 DemoState demoState;
 
-#define DEBUG false
+#define DEBUG true
 
 void setup() {
 
@@ -34,6 +38,8 @@ void setup() {
     lightControl.setup();
     waterLevelSensor.setup();
     moistureSensor.setup();
+    powerMon40.setup();
+    powerMon41.setup();
     delay(1000);
 
     currentTargets.targetTemp = 24.0;
@@ -44,10 +50,8 @@ void loop() {
     if (DEBUG) {
         // test water level sensor
         float waterLevel = waterLevelSensor.getWaterLevelPercent();
-
-        Serial.print("Water Level: ");
         Serial.println(waterLevel);
-
+       
     }
     else {
         // Poll demo state from server (rate-limited internally)
@@ -57,13 +61,20 @@ void loop() {
         currentReadings.air_temp_c = tempControl.getTemperature();
         currentReadings.water_level_pct = waterLevelSensor.getWaterLevelPercent();
         currentReadings.moisture_pct = moistureSensor.getMoisturePercent();
+        currentReadings.power_mw = powerMon40.getPower_mW();
 
         // Remaining Placeholders
         currentReadings.humidity_pct = 60.0;
         currentReadings.light_intensity_pct = 85.0;
         currentReadings.nutrient_a_pct = 95.0;
 
-        if (demoState.demo_enabled) {
+        // --- Low Power Mode: shut down all actuators, only send telemetry ---
+        if (demoState.low_power_mode) {
+            tempControl.setActuators(0, 0);          // Heater OFF, Fan OFF
+            digitalWrite(PIN_PUMP_WATER, LOW);        // Water pump OFF
+            fluidControl.stopMixer();                 // Nutrient mixer OFF
+            lightControl.setLight(false);             // Grow lights OFF
+        } else if (demoState.demo_enabled) {
             // Track previous state to avoid spamming the hardware every 100ms
             static DemoState lastDemoState;
             static bool firstRun = true;
@@ -130,7 +141,7 @@ void loop() {
             }
         }
 
-        if (!demoState.demo_enabled) {
+        if (!demoState.demo_enabled && !demoState.low_power_mode) {
             lightControl.loop();
         }
 

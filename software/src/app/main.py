@@ -220,10 +220,14 @@ demo_ok, demo_data, demo_err = api_request(server_url, "GET", demo_path)
 demo_state = demo_data if demo_ok else {}
 
 st.subheader("🎛️ Demo Controls")
-dc0, dc1, dc2, dc3, dc4 = st.columns(5)
 
-with dc0:
+lp0, lp1 = st.columns(2)
+with lp0:
     demo_enabled = st.toggle("🚀 Demo Mode", value=demo_state.get("demo_enabled", False), key="demo_enabled")
+with lp1:
+    low_power = st.toggle("🔋 Low Power Mode", value=demo_state.get("low_power_mode", False), key="low_power_mode")
+
+dc1, dc2, dc3, dc4 = st.columns(4)
 with dc1:
     heater_on = st.toggle("🔥 Heater", value=demo_state.get("heater", False), key="demo_heater")
 with dc2:
@@ -234,8 +238,8 @@ with dc4:
     lights_on = st.toggle("💡 Grow Lights", value=demo_state.get("grow_lights", False), key="demo_lights")
 
 # Detect if any toggle changed and push the update
-new_demo = {"demo_enabled": demo_enabled, "heater": heater_on, "water_pump": water_on, "nutrient_mixer": nutrient_on, "grow_lights": lights_on}
-if new_demo != {k: demo_state.get(k, False) for k in ("demo_enabled", "heater", "water_pump", "nutrient_mixer", "grow_lights")}:
+new_demo = {"demo_enabled": demo_enabled, "low_power_mode": low_power, "heater": heater_on, "water_pump": water_on, "nutrient_mixer": nutrient_on, "grow_lights": lights_on}
+if new_demo != {k: demo_state.get(k, False) for k in ("demo_enabled", "low_power_mode", "heater", "water_pump", "nutrient_mixer", "grow_lights")}:
     ok, _, err = api_request(server_url, "POST", demo_path, new_demo)
     if ok:
         st.toast("Actuator state updated!", icon="✅")
