@@ -43,7 +43,7 @@ class EmailClient:
         message["Subject"] = subject
         message["From"] = from_email
         message["To"] = ", ".join(to_emails)
-        message.set_content(body)
+        message.set_content(body, charset="utf-8")
 
         with smtplib.SMTP(self.config.smtp_server, self.config.smtp_port) as smtp:
             if self.config.use_tls:

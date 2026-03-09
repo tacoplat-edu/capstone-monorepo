@@ -102,6 +102,7 @@ class DemoControl(BaseModel):
     water_pump: bool = False
     nutrient_mixer: bool = False
     grow_lights: bool = False
+    last_email_sent: Optional[datetime] = None
     updated_at: datetime = Field(default_factory=datetime.utcnow)
 
 class Notification(BaseModel):
@@ -121,14 +122,16 @@ def model_to_dict(model: BaseModel) -> Dict[str, object]:
 def load_email_settings() -> Optional[Dict[str, object]]:
     if EmailClient is None or EmailConfig is None:
         return None
-    smtp_server = os.getenv("SMTP_SERVER")
-    username = os.getenv("SMTP_USERNAME")
-    password = os.getenv("SMTP_PASSWORD")
-    from_email = os.getenv("SMTP_FROM")
+    smtp_server = os.getenv("SMTP_SERVER", "")
+    username = os.getenv("SMTP_USERNAME", "")
+    password = os.getenv("SMTP_PASSWORD", "")
+    from_email = os.getenv("SMTP_FROM", "")
+    if not smtp_server or not username or not password or not from_email:
+        return None
+
+    # ALERT_RECIPIENTS is optional — only used for automated alert emails
     recipients_raw = os.getenv("ALERT_RECIPIENTS", "")
     recipients = [item.strip() for item in recipients_raw.split(",") if item.strip()]
-    if not smtp_server or not username or not password or not from_email or not recipients:
-        return None
     config = EmailConfig(
         smtp_server=smtp_server,
         smtp_port=int(os.getenv("SMTP_PORT", "587")),
@@ -404,3 +407,97 @@ def update_demo_control(hardware_id: str, payload: Dict[str, Any]):
         )
 
     return DemoControl(**updated_data)
+
+
+@app.post("/devices/{hardware_id}/send_email")
+def send_status_email(hardware_id: str) -> Dict[str, Any]:
+    """Send a water-level alert email to the device owner if water is below target."""
+    # 1. Verify email settings are configured
+    if not EMAIL_SETTINGS:
+        raise HTTPException(
+            status_code=503,
+            detail="Email is not configured on the server. Check SMTP environment variables.",
+        )
+
+    # 2. Look up device owner email
+    device_config = get_or_create_device_config(hardware_id)
+    owner_email = device_config.owner_id.replace("\xa0", "").strip()
+    if not owner_email or owner_email == "default_user":
+        raise HTTPException(
+            status_code=400,
+            detail="No owner email found for this device. Complete onboarding first.",
+        )
+
+    # 3. Enforce 24-hour cooldown
+    if MONGO_STORAGE:
+        demo_doc = MONGO_STORAGE.db["demo_control"].find_one({"hardware_id": hardware_id})
+        if demo_doc and demo_doc.get("last_email_sent"):
+            last_sent = demo_doc["last_email_sent"]
+            if isinstance(last_sent, str):
+                last_sent = datetime.fromisoformat(last_sent)
+            hours_since = (datetime.utcnow() - last_sent).total_seconds() / 3600
+            if hours_since < 24:
+                hours_left = round(24 - hours_since, 1)
+                raise HTTPException(
+                    status_code=429,
+                    detail=f"Email already sent {round(hours_since, 1)}h ago. Next email available in {hours_left}h.",
+                )
+
+    # 4. Get latest telemetry and check water level against target
+    water_level = None
+    if MONGO_STORAGE:
+        latest = MONGO_STORAGE.db["telemetry"].find_one(
+            {"device_id": hardware_id}, sort=[("received_at", -1)]
+        )
+        if latest and "sensors" in latest:
+            water_level = latest["sensors"].get("water_level_pct")
+
+    water_target = device_config.targets.get("water_level")
+    water_min = water_target.min if water_target else 50.0
+
+    if water_level is not None and water_level < water_min:
+        subject = "PlantBox Alert - Water Level Low"
+        body = (
+            f"Your PlantBox ({hardware_id}) water level is at {water_level}%.\n"
+            f"This is below your minimum target of {water_min}%.\n\n"
+            f"Please refill the water reservoir."
+        )
+    else:
+        subject = "PlantBox Status - Water Level OK"
+        level_str = f"{water_level}%" if water_level is not None else "unknown"
+        body = (
+            f"Your PlantBox ({hardware_id}) water level is at {level_str}.\n"
+            f"This is within your target range (min {water_min}%).\n\n"
+            f"No action needed."
+        )
+
+    # 4. Send the email
+    try:
+        EMAIL_SETTINGS["client"].send_email(
+            subject=subject,
+            body=body,
+            from_email=EMAIL_SETTINGS["from_email"],
+            to_emails=[owner_email],
+        )
+    except Exception as exc:
+        logging.error("Failed to send status email: %s", exc, exc_info=True)
+        raise HTTPException(status_code=500, detail=f"Email send failed: {exc}")
+
+    # 5. Record timestamp in demo_control
+    sent_at = datetime.utcnow()
+    if MONGO_STORAGE:
+        MONGO_STORAGE.db["demo_control"].update_one(
+            {"hardware_id": hardware_id},
+            {"$set": {"last_email_sent": sent_at, "updated_at": sent_at}},
+            upsert=True,
+        )
+
+    logging.info("Status email sent to %s for device %s", owner_email, hardware_id)
+    return {
+        "status": "ok",
+        "sent_to": owner_email,
+        "sent_at": sent_at.isoformat(),
+        "water_level": water_level,
+        "water_min_target": water_min,
+        "is_below_target": water_level is not None and water_level < water_min,
+    }
