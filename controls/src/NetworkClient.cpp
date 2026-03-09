@@ -15,7 +15,7 @@ void NetworkClient::updateEndpoints() {
 
 void NetworkClient::setup() {
     WiFiManager wm;
-    // wm.resetSettings();
+    wm.resetSettings();
     preferences.begin("nvs", false); // Open "nvs" namespace in read/write mode
 
     // 1. Load the last saved Backend IP from memory (default if not found)
