@@ -14,7 +14,7 @@ import streamlit as st
 # --- Configuration ---
 DEFAULT_SERVER_URL = os.getenv("PLANTBOX_SERVER_URL", "http://127.0.0.1:8000")
 # We default to the ID used in your seed script
-DEFAULT_DEVICE_ID = os.getenv("PLANTBOX_DEVICE_ID", "PlantBox-1")
+DEFAULT_DEVICE_ID = os.getenv("PLANTBOX_DEVICE_ID", "PlantBox-6")
 
 # --- Helper Functions ---
 

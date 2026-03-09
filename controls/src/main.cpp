@@ -22,8 +22,10 @@ PowerMonitor powerMon41(0x41, 0.002f);  // R4: 2 mΩ shunt
 // --- State Variables ---
 SystemTargets currentTargets;
 DemoState demoState;
+DemoState lastDemoState;
+bool firstRun = true;
 
-#define DEBUG true
+#define DEBUG false
 
 void setup() {
 
@@ -63,21 +65,41 @@ void loop() {
         currentReadings.moisture_pct = moistureSensor.getMoisturePercent();
         currentReadings.power_mw = powerMon40.getPower_mW();
 
+        // print sensor readings to serial monitor
+        Serial.print("Air Temp: ");
+        Serial.println(currentReadings.air_temp_c);
+        Serial.print("Water Level: ");
+        Serial.println(currentReadings.water_level_pct);
+        Serial.print("Moisture: ");
+        Serial.println(currentReadings.moisture_pct);
+        Serial.print("Power: ");
+        Serial.println(currentReadings.power_mw);
+
         // Remaining Placeholders
         currentReadings.humidity_pct = 60.0;
         currentReadings.light_intensity_pct = 85.0;
         currentReadings.nutrient_a_pct = 95.0;
 
-        // --- Low Power Mode: shut down all actuators, only send telemetry ---
+        // --- Low Power Mode: hold all actuators at their last known state ---
         if (demoState.low_power_mode) {
-            tempControl.setActuators(0, 0);          // Heater OFF, Fan OFF
-            digitalWrite(PIN_PUMP_WATER, LOW);        // Water pump OFF
-            fluidControl.stopMixer();                 // Nutrient mixer OFF
-            lightControl.setLight(false);             // Grow lights OFF
+            // Heater: restore last state
+            if (lastDemoState.heater) {
+                tempControl.setActuators(100, 1);
+            } else {
+                tempControl.setActuators(0, 0);
+            }
+            // Water pump: restore last state
+            digitalWrite(PIN_PUMP_WATER, lastDemoState.water_pump ? HIGH : LOW);
+            // Nutrient mixer: restore last state
+            if (lastDemoState.nutrient_mixer) {
+                fluidControl.setMixerSpeed(255);
+            } else {
+                fluidControl.stopMixer();
+            }
+            // Grow lights: restore last state
+            lightControl.setLight(lastDemoState.grow_lights);
         } else if (demoState.demo_enabled) {
             // Track previous state to avoid spamming the hardware every 100ms
-            static DemoState lastDemoState;
-            static bool firstRun = true;
 
             if (firstRun) {
                 Serial.println("DEMO: === Demo Mode ACTIVE ===");

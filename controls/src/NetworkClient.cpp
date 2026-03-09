@@ -1,7 +1,7 @@
 #include "NetworkClient.h"
 
 // Define the global config variables (now as mutable Strings)
-String DEVICE_ID = "PlantBox-1";
+String DEVICE_ID = "PlantBox-6";
 String BASE_URL = "http://172.20.10.2:8000"; 
 String API_CONFIG;
 String API_TELEMETRY;
@@ -15,7 +15,7 @@ void NetworkClient::updateEndpoints() {
 
 void NetworkClient::setup() {
     WiFiManager wm;
-    wm.resetSettings();
+    // wm.resetSettings();
     preferences.begin("nvs", false); // Open "nvs" namespace in read/write mode
 
     // 1. Load the last saved Backend IP from memory (default if not found)
