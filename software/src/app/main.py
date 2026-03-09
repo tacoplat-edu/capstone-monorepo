@@ -246,6 +246,28 @@ if new_demo != {k: demo_state.get(k, False) for k in ("demo_enabled", "low_power
     else:
         st.error(f"Failed to update actuator: {err}")
 
+# --- Send Email Button ---
+email_col1, email_col2 = st.columns([1, 2])
+with email_col1:
+    send_email_clicked = st.button("📧 Send Status Email")
+with email_col2:
+    last_sent = demo_state.get("last_email_sent")
+    if last_sent:
+        st.caption(f"Last sent: {last_sent}")
+    else:
+        st.caption("No email sent yet")
+
+if send_email_clicked:
+    send_ok, send_data, send_err = api_request(
+        server_url, "POST", f"/devices/{device_id}/send_email"
+    )
+    if send_ok:
+        st.toast(f"Email sent to {send_data.get('sent_to', 'owner')}!", icon="📧")
+        time_lib.sleep(1)
+        st.rerun()
+    else:
+        st.error(f"Failed to send email: {send_err}")
+
 # 7. Settings Form (Updated for new schema)
 with st.expander("Device Settings"):
     with st.form("settings_form"):
