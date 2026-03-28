@@ -102,6 +102,7 @@ class DemoControl(BaseModel):
     heater: bool = False
     water_pump: bool = False
     nutrient_mixer: bool = False
+    nutrient_pump: bool = False
     grow_lights: bool = False
     last_email_sent: Optional[datetime] = None
     updated_at: datetime = Field(default_factory=datetime.utcnow)

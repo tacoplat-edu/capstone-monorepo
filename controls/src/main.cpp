@@ -44,16 +44,71 @@ void setup() {
     powerMon41.setup();
     delay(1000);
 
-    currentTargets.targetTemp = 24.0;
+    currentTargets.targetTemp = 25.0;
     currentTargets.triggerWatering = false;
+
+    // CSV header for CoolTerm capture
+    if (DEBUG) {
+        // Serial.println("time_ms,moisture_pct,pump_state,water_level_pct");
+        Serial.println("time_ms,temp_c,target_c,heater_pwm,fan_state");
+    }
 }
 
 void loop() {
     if (DEBUG) {
-        // test water level sensor
-        float waterLevel = waterLevelSensor.getWaterLevelPercent();
-        Serial.println(waterLevel);
-       
+        // turn on nutrient pump
+        digitalWrite(PIN_PUMP_NUTRIENT, HIGH);
+
+        // sleep for 10 seconds
+        delay(10000);
+
+        // turn off nutrient pump
+        digitalWrite(PIN_PUMP_NUTRIENT, LOW);
+
+        // sleep for 10 seconds
+        delay(10000);
+
+        // turn on water pump
+        // digitalWrite(PIN_PUMP_WATER, HIGH);
+
+        // turn on mixer motor at low speed
+        // fluidControl.setMixerSpeed(255);
+
+
+
+        // --- Fluid control testing: moisture sensor + pump ---
+        // float moisture = moistureSensor.getMoisturePercent();
+        // bool pumpOn = moisture < 70.0;  // pump ON when soil is dry
+        // Read water level sensor
+        // float waterLevel = waterLevelSensor.getWaterLevelPercent();
+        
+        // digitalWrite(PIN_PUMP_WATER, pumpOn ? HIGH : LOW);
+
+        // CSV row: time_ms, moisture_pct, pump_state, water_level_pct
+        // Serial.print(millis());
+        // Serial.print(",");
+        // Serial.print(moisture, 1);
+        // Serial.print(",");
+        // Serial.print(pumpOn ? 1 : 0);
+        // Serial.print(",");
+        // Serial.println(waterLevel, 1);
+
+        // --- Temperature control tuning loop ---
+        // float currentTemp = tempControl.getTemperature();
+        // float target = currentTargets.targetTemp;  // 25 °C
+        
+        // tempControl.loop(currentTemp, target);
+        
+        // CSV row: time_ms, temp_c, target_c, heater_pwm, fan_state
+        // Serial.print(millis());
+        // Serial.print(",");
+        // Serial.print(currentTemp, 2);
+        // Serial.print(",");
+        // Serial.print(target, 1);
+        // Serial.print(",");
+        // Serial.print(tempControl.getHeaterPWM());
+        // Serial.print(",");
+        // Serial.println(tempControl.getFanState());
     }
     else {
         // Poll demo state from server (rate-limited internally)
@@ -90,9 +145,11 @@ void loop() {
             }
             // Water pump: restore last state
             digitalWrite(PIN_PUMP_WATER, lastDemoState.water_pump ? HIGH : LOW);
+            // Nutrient pump: restore last state
+            digitalWrite(PIN_PUMP_NUTRIENT, lastDemoState.nutrient_pump ? HIGH : LOW);
             // Nutrient mixer: restore last state
             if (lastDemoState.nutrient_mixer) {
-                fluidControl.setMixerSpeed(255);
+                fluidControl.setMixerSpeed(100);
             } else {
                 fluidControl.stopMixer();
             }
@@ -103,6 +160,13 @@ void loop() {
 
             if (firstRun) {
                 Serial.println("DEMO: === Demo Mode ACTIVE ===");
+                // Reset all actuators to OFF on entry — clears any state
+                // left behind by the normal PID control loop
+                tempControl.setActuators(0, 0);
+                digitalWrite(PIN_PUMP_WATER, LOW);
+                digitalWrite(PIN_PUMP_NUTRIENT, LOW);
+                fluidControl.stopMixer();
+                lightControl.setLight(false);
                 firstRun = false;
             }
 
@@ -125,6 +189,17 @@ void loop() {
                 } else {
                     Serial.println("DEMO: Water Pump -> OFF");
                     digitalWrite(PIN_PUMP_WATER, LOW);
+                }
+            }
+
+            // --- Nutrient Pump: direct GPIO ---
+            if (demoState.nutrient_pump != lastDemoState.nutrient_pump) {
+                if (demoState.nutrient_pump) {
+                    Serial.println("DEMO: Nutrient Pump -> ON");
+                    digitalWrite(PIN_PUMP_NUTRIENT, HIGH);
+                } else {
+                    Serial.println("DEMO: Nutrient Pump -> OFF");
+                    digitalWrite(PIN_PUMP_NUTRIENT, LOW);
                 }
             }
 

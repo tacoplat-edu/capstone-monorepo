@@ -14,10 +14,10 @@ void WaterLevelSensor::setup() {
     }
 
     // Fresh water density so depth() uses ~997 kg/m^3[web:1][web:21]
-    sensor.setFluidDensity(997);
+    // sensor.setFluidDensity(997);
 
     initialized = true;
-    calibrateBaseline();
+    // calibrateBaseline();
 }
 
 void WaterLevelSensor::calibrateBaseline() {
@@ -45,6 +45,7 @@ float WaterLevelSensor::getWaterLevelPercent() {
 
     // Option A: use depth() directly (uses setFluidDensity + absolute pressure)
     float depthMeters = sensor.depth();   // meters of water above sensor
+    return depthMeters;
 
     // If sensor is above the bottom, add that distance to get effective water column
     depthMeters += sensorOffsetMeters;

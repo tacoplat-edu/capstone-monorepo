@@ -204,7 +204,7 @@ if telemetry_ok and telemetry_data:
         flat_data.append(row)
         
     df = pd.DataFrame(flat_data)
-    df["time"] = pd.to_datetime(df["time"])
+    df["time"] = pd.to_datetime(df["time"], format="ISO8601")
     df = df.set_index("time")
     
     # Draw charts
@@ -227,19 +227,21 @@ with lp0:
 with lp1:
     low_power = st.toggle("🔋 Low Power Mode", value=demo_state.get("low_power_mode", False), key="low_power_mode")
 
-dc1, dc2, dc3, dc4 = st.columns(4)
+dc1, dc2, dc3, dc4, dc5 = st.columns(5)
 with dc1:
     heater_on = st.toggle("🔥 Heater", value=demo_state.get("heater", False), key="demo_heater")
 with dc2:
     water_on = st.toggle("💧 Water Pump", value=demo_state.get("water_pump", False), key="demo_water")
 with dc3:
-    nutrient_on = st.toggle("🧪 Nutrient Mixer", value=demo_state.get("nutrient_mixer", False), key="demo_nutrient")
+    nutrient_pump_on = st.toggle("💊 Nutrient Pump", value=demo_state.get("nutrient_pump", False), key="demo_nutrient_pump")
 with dc4:
+    nutrient_on = st.toggle("🧪 Nutrient Mixer", value=demo_state.get("nutrient_mixer", False), key="demo_nutrient")
+with dc5:
     lights_on = st.toggle("💡 Grow Lights", value=demo_state.get("grow_lights", False), key="demo_lights")
 
 # Detect if any toggle changed and push the update
-new_demo = {"demo_enabled": demo_enabled, "low_power_mode": low_power, "heater": heater_on, "water_pump": water_on, "nutrient_mixer": nutrient_on, "grow_lights": lights_on}
-if new_demo != {k: demo_state.get(k, False) for k in ("demo_enabled", "low_power_mode", "heater", "water_pump", "nutrient_mixer", "grow_lights")}:
+new_demo = {"demo_enabled": demo_enabled, "low_power_mode": low_power, "heater": heater_on, "water_pump": water_on, "nutrient_pump": nutrient_pump_on, "nutrient_mixer": nutrient_on, "grow_lights": lights_on}
+if new_demo != {k: demo_state.get(k, False) for k in ("demo_enabled", "low_power_mode", "heater", "water_pump", "nutrient_pump", "nutrient_mixer", "grow_lights")}:
     ok, _, err = api_request(server_url, "POST", demo_path, new_demo)
     if ok:
         st.toast("Actuator state updated!", icon="✅")

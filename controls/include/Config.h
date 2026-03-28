@@ -22,8 +22,8 @@ extern String API_DEMO_CONTROL;
 #define PIN_MOISTURE_SENSOR 34     // EK1940 Analog Input (Use an input-only pin like 34, 35, 36, or 39)
 #define PIN_HEATER      4
 #define PIN_FAN         12
-#define PIN_PUMP_WATER     33
-#define PIN_PUMP_NUTRIENT  27
+#define PIN_PUMP_WATER     18
+#define PIN_PUMP_NUTRIENT  33
 #define PIN_VALVE_MAIN     26
 #define PIN_MIXER_MOTOR    25
 #define PIN_FLOW_SENSOR    33

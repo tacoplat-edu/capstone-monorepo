@@ -15,7 +15,7 @@ void NetworkClient::updateEndpoints() {
 
 void NetworkClient::setup() {
     WiFiManager wm;
-    // wm.resetSettings();
+    wm.resetSettings();
     preferences.begin("nvs", false); // Open "nvs" namespace in read/write mode
 
     // 1. Load the last saved Backend IP from memory (default if not found)
@@ -160,6 +160,7 @@ void NetworkClient::fetchDemoControl(DemoState &state) {
                 state.heater        = (payload.indexOf("\"heater\": true")        >= 0) || (payload.indexOf("\"heater\":true")        >= 0);
                 state.water_pump    = (payload.indexOf("\"water_pump\": true")    >= 0) || (payload.indexOf("\"water_pump\":true")    >= 0);
                 state.nutrient_mixer = (payload.indexOf("\"nutrient_mixer\": true") >= 0) || (payload.indexOf("\"nutrient_mixer\":true") >= 0);
+                state.nutrient_pump  = (payload.indexOf("\"nutrient_pump\": true")  >= 0) || (payload.indexOf("\"nutrient_pump\":true")  >= 0);
                 state.grow_lights    = (payload.indexOf("\"grow_lights\": true")    >= 0) || (payload.indexOf("\"grow_lights\":true")    >= 0);
             } else {
                 Serial.printf("NET: Demo GET Error: %s\n", http.errorToString(httpCode).c_str());
