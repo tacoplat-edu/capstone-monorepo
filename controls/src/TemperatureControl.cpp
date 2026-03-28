@@ -1,7 +1,15 @@
 #include "TemperatureControl.h"
 
+// ESP32 LEDC PWM config for PTC Heater
+#define HEATER_LEDC_CHANNEL  0
+#define HEATER_LEDC_FREQ     5000   // 5 kHz
+#define HEATER_LEDC_RES      8      // 8-bit (0-255)
+
 void TemperatureControl::setup() {
-    pinMode(PIN_HEATER, OUTPUT);
+    // PTC Heater — PWM via LEDC
+    ledcSetup(HEATER_LEDC_CHANNEL, HEATER_LEDC_FREQ, HEATER_LEDC_RES);
+    ledcAttachPin(PIN_HEATER, HEATER_LEDC_CHANNEL);
+    // Fan — digital ON/OFF
     pinMode(PIN_FAN, OUTPUT);
     
     oneWire = new OneWire(PIN_TEMP_SENSOR); 
@@ -65,18 +73,19 @@ void TemperatureControl::setActuators(int heaterPWM, int fanState) {
     currentHeaterPWM = heaterPWM;
     currentFanState = (fanState > 0);
 
-    // 2. SIMULATION: Print instead of writing to pins
-    // In real code: analogWrite(PIN_HEATER, heaterPWM);
-    // In real code: digitalWrite(PIN_FAN, fanState);
+    // 2. DRIVE ACTUATORS
+    // PTC Heater (12V 70W) — PWM via LEDC channel
+    ledcWrite(HEATER_LEDC_CHANNEL, heaterPWM);
+    // Fan — simple ON/OFF
+    digitalWrite(PIN_FAN, fanState);
 
     static unsigned long lastPrint = 0;
-    if (millis() - lastPrint > 2000) { // Don't spam serial
+    if (millis() - lastPrint > 2000) {
         Serial.printf("TEMP_CTRL: Heater PWM: %d | Fan: %s\n", heaterPWM, fanState ? "ON" : "OFF");
-        
-        // Visual feedback on LED if Heater is working hard
+
         if (heaterPWM > 100) digitalWrite(PIN_ONBOARD_LED, HIGH);
         else digitalWrite(PIN_ONBOARD_LED, LOW);
-        
+
         lastPrint = millis();
     }
 }

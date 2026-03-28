@@ -1,8 +1,9 @@
 // WaterLevelSensor.cpp
 #include "WaterLevelSensor.h"
+#include "Config.h"
 
 void WaterLevelSensor::setup() {
-    Wire.begin();
+    Wire.begin(PIN_I2C_SDA, PIN_I2C_SCL);
 
     // Identify correct model (02BA for your module)[web:24]
     sensor.setModel(MS5837::MS5837_02BA);
@@ -13,10 +14,10 @@ void WaterLevelSensor::setup() {
     }
 
     // Fresh water density so depth() uses ~997 kg/m^3[web:1][web:21]
-    sensor.setFluidDensity(997);
+    // sensor.setFluidDensity(997);
 
     initialized = true;
-    calibrateBaseline();
+    // calibrateBaseline();
 }
 
 void WaterLevelSensor::calibrateBaseline() {
@@ -44,6 +45,7 @@ float WaterLevelSensor::getWaterLevelPercent() {
 
     // Option A: use depth() directly (uses setFluidDensity + absolute pressure)
     float depthMeters = sensor.depth();   // meters of water above sensor
+    return depthMeters;
 
     // If sensor is above the bottom, add that distance to get effective water column
     depthMeters += sensorOffsetMeters;

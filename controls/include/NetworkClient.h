@@ -16,6 +16,7 @@ struct SensorData {
     float water_level_pct;
     float nutrient_a_pct;
     float moisture_pct;
+    float power_mw;
 };
 
 struct SystemTargets {
@@ -26,9 +27,12 @@ struct SystemTargets {
 
 struct DemoState {
     bool demo_enabled = false;
+    bool low_power_mode = false;
     bool heater = false;
     bool water_pump = false;
     bool nutrient_mixer = false;
+    bool nutrient_pump = false;
+    bool grow_lights = false;
 };
 
 class NetworkClient {

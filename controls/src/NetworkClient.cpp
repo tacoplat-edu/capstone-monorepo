@@ -1,8 +1,8 @@
 #include "NetworkClient.h"
 
 // Define the global config variables (now as mutable Strings)
-String DEVICE_ID = "PlantBox-1";
-String BASE_URL = "http://192.168.2.20:8000"; 
+String DEVICE_ID = "PlantBox-6";
+String BASE_URL = "http://172.20.10.2:8000"; 
 String API_CONFIG;
 String API_TELEMETRY;
 String API_DEMO_CONTROL;
@@ -15,10 +15,11 @@ void NetworkClient::updateEndpoints() {
 
 void NetworkClient::setup() {
     WiFiManager wm;
+    wm.resetSettings();
     preferences.begin("nvs", false); // Open "nvs" namespace in read/write mode
 
     // 1. Load the last saved Backend IP from memory (default if not found)
-    String savedIP = preferences.getString("backend_ip", "192.168.2.20");
+    String savedIP = preferences.getString("backend_ip", "172.20.10.2");
 
     // 2. Add the custom IP field to the Captive Portal
     WiFiManagerParameter custom_backend_ip("server", "Backend IP (e.g. 192.168.2.20)", savedIP.c_str(), 40);
@@ -111,7 +112,8 @@ void NetworkClient::sendTelemetryData(SensorData data) {
             jsonPayload += "\"light_intensity_pct\": " + String(data.light_intensity_pct) + ",";
             jsonPayload += "\"water_level_pct\": " + String(data.water_level_pct) + ",";
             jsonPayload += "\"nutrient_a_pct\": " + String(data.nutrient_a_pct) + ",";
-            jsonPayload += "\"moisture_pct\": " + String(data.moisture_pct);
+            jsonPayload += "\"moisture_pct\": " + String(data.moisture_pct) + ",";
+            jsonPayload += "\"power_mw\": " + String(data.power_mw);
             jsonPayload += "}"; 
             
             // Note: 'captured_at' is optional (has default in Python), so we omit it here.
@@ -154,9 +156,12 @@ void NetworkClient::fetchDemoControl(DemoState &state) {
 
                 // Simple JSON boolean parsing (no ArduinoJson dependency)
                 state.demo_enabled  = (payload.indexOf("\"demo_enabled\": true")  >= 0) || (payload.indexOf("\"demo_enabled\":true")  >= 0);
+                state.low_power_mode = (payload.indexOf("\"low_power_mode\": true") >= 0) || (payload.indexOf("\"low_power_mode\":true") >= 0);
                 state.heater        = (payload.indexOf("\"heater\": true")        >= 0) || (payload.indexOf("\"heater\":true")        >= 0);
                 state.water_pump    = (payload.indexOf("\"water_pump\": true")    >= 0) || (payload.indexOf("\"water_pump\":true")    >= 0);
                 state.nutrient_mixer = (payload.indexOf("\"nutrient_mixer\": true") >= 0) || (payload.indexOf("\"nutrient_mixer\":true") >= 0);
+                state.nutrient_pump  = (payload.indexOf("\"nutrient_pump\": true")  >= 0) || (payload.indexOf("\"nutrient_pump\":true")  >= 0);
+                state.grow_lights    = (payload.indexOf("\"grow_lights\": true")    >= 0) || (payload.indexOf("\"grow_lights\":true")    >= 0);
             } else {
                 Serial.printf("NET: Demo GET Error: %s\n", http.errorToString(httpCode).c_str());
             }

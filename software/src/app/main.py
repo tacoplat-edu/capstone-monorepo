@@ -14,7 +14,7 @@ import streamlit as st
 # --- Configuration ---
 DEFAULT_SERVER_URL = os.getenv("PLANTBOX_SERVER_URL", "http://127.0.0.1:8000")
 # We default to the ID used in your seed script
-DEFAULT_DEVICE_ID = os.getenv("PLANTBOX_DEVICE_ID", "PlantBox-1")
+DEFAULT_DEVICE_ID = os.getenv("PLANTBOX_DEVICE_ID", "PlantBox-6")
 
 # --- Helper Functions ---
 
@@ -177,12 +177,16 @@ if latest:
     st.subheader("Reservoir Levels")
     
     water_level = sensors.get("water_level_pct", 0)
-    st.caption(f"Water Tank: {water_level}%")
-    st.progress(int(water_level))
+    if water_level < 0:
+        st.caption("Water Tank: No Sensor")
+        st.progress(0)
+    else:
+        st.caption(f"Water Tank: {water_level}%")
+        st.progress(max(0, min(100, int(water_level))))
 
     nutrient_level = sensors.get("nutrient_a_pct", 0)
     st.caption(f"Nutrient A: {nutrient_level}%")
-    st.progress(int(nutrient_level))
+    st.progress(max(0, min(100, int(nutrient_level))))
 
 else:
     st.warning("No telemetry data received yet.")
@@ -200,7 +204,7 @@ if telemetry_ok and telemetry_data:
         flat_data.append(row)
         
     df = pd.DataFrame(flat_data)
-    df["time"] = pd.to_datetime(df["time"])
+    df["time"] = pd.to_datetime(df["time"], format="ISO8601")
     df = df.set_index("time")
     
     # Draw charts
@@ -216,25 +220,55 @@ demo_ok, demo_data, demo_err = api_request(server_url, "GET", demo_path)
 demo_state = demo_data if demo_ok else {}
 
 st.subheader("🎛️ Demo Controls")
-dc0, dc1, dc2, dc3 = st.columns(4)
 
-with dc0:
+lp0, lp1 = st.columns(2)
+with lp0:
     demo_enabled = st.toggle("🚀 Demo Mode", value=demo_state.get("demo_enabled", False), key="demo_enabled")
+with lp1:
+    low_power = st.toggle("🔋 Low Power Mode", value=demo_state.get("low_power_mode", False), key="low_power_mode")
+
+dc1, dc2, dc3, dc4, dc5 = st.columns(5)
 with dc1:
     heater_on = st.toggle("🔥 Heater", value=demo_state.get("heater", False), key="demo_heater")
 with dc2:
     water_on = st.toggle("💧 Water Pump", value=demo_state.get("water_pump", False), key="demo_water")
 with dc3:
+    nutrient_pump_on = st.toggle("💊 Nutrient Pump", value=demo_state.get("nutrient_pump", False), key="demo_nutrient_pump")
+with dc4:
     nutrient_on = st.toggle("🧪 Nutrient Mixer", value=demo_state.get("nutrient_mixer", False), key="demo_nutrient")
+with dc5:
+    lights_on = st.toggle("💡 Grow Lights", value=demo_state.get("grow_lights", False), key="demo_lights")
 
 # Detect if any toggle changed and push the update
-new_demo = {"demo_enabled": demo_enabled, "heater": heater_on, "water_pump": water_on, "nutrient_mixer": nutrient_on}
-if new_demo != {k: demo_state.get(k, False) for k in ("demo_enabled", "heater", "water_pump", "nutrient_mixer")}:
+new_demo = {"demo_enabled": demo_enabled, "low_power_mode": low_power, "heater": heater_on, "water_pump": water_on, "nutrient_pump": nutrient_pump_on, "nutrient_mixer": nutrient_on, "grow_lights": lights_on}
+if new_demo != {k: demo_state.get(k, False) for k in ("demo_enabled", "low_power_mode", "heater", "water_pump", "nutrient_pump", "nutrient_mixer", "grow_lights")}:
     ok, _, err = api_request(server_url, "POST", demo_path, new_demo)
     if ok:
         st.toast("Actuator state updated!", icon="✅")
     else:
         st.error(f"Failed to update actuator: {err}")
+
+# --- Send Email Button ---
+email_col1, email_col2 = st.columns([1, 2])
+with email_col1:
+    send_email_clicked = st.button("📧 Send Status Email")
+with email_col2:
+    last_sent = demo_state.get("last_email_sent")
+    if last_sent:
+        st.caption(f"Last sent: {last_sent}")
+    else:
+        st.caption("No email sent yet")
+
+if send_email_clicked:
+    send_ok, send_data, send_err = api_request(
+        server_url, "POST", f"/devices/{device_id}/send_email"
+    )
+    if send_ok:
+        st.toast(f"Email sent to {send_data.get('sent_to', 'owner')}!", icon="📧")
+        time_lib.sleep(1)
+        st.rerun()
+    else:
+        st.error(f"Failed to send email: {send_err}")
 
 # 7. Settings Form (Updated for new schema)
 with st.expander("Device Settings"):

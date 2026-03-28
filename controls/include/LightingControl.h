@@ -8,6 +8,7 @@ class LightingControl {
 public:
     void setup();
     void loop(); // Checks time
+    void setLight(bool on);
 
 private:
     bool lightsOn = false;
