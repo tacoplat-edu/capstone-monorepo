@@ -1,0 +1,2605 @@
+0.00
+0.00
+0.00
+0.00
+0.00
+0.00
+0.00
+0.00
+0.00
+0.00
+0.00
+0.00
+0.00
+0.00
+0.00
+0.00
+0.00
+0.00
+0.00
+0.00
+0.00
+0.00
+0.00
+0.00
+0.00
+0.00
+0.00
+0.00
+0.00
+0.00
+0.00
+0.00
+0.00
+0.00
+0.00
+0.00
+0.00
+0.00
+0.00
+0.00
+0.00
+0.00
+0.00
+0.00
+0.00
+0.00
+0.00
+0.00
+0.00
+0.00
+0.00
+0.00
+0.00
+0.00
+0.00
+0.00
+0.00
+0.00
+0.00
+0.00
+0.00
+0.00
+0.00
+0.00
+0.00
+0.00
+0.00
+0.00
+0.00
+0.00
+0.00
+0.00
+0.00
+0.00
+0.00
+0.00
+0.00
+0.00
+0.00
+0.00
+0.00
+0.00
+0.00
+0.00
+0.00
+0.00
+0.00
+0.00
+0.00
+0.00
+0.00
+0.00
+0.00
+0.00
+0.00
+0.00
+0.00
+0.00
+0.00
+0.00
+0.00
+0.00
+0.00
+0.00
+0.00
+0.00
+0.00
+0.00
+0.00
+0.00
+0.00
+0.00
+0.00
+0.00
+0.00
+0.00
+0.00
+0.00
+0.00
+0.00
+0.00
+0.00
+0.00
+0.00
+0.00
+0.00
+0.00
+0.00
+0.00
+0.00
+0.00
+0.00
+0.00
+0.00
+0.00
+0.00
+0.00
+0.00
+0.00
+0.00
+0.00
+0.00
+0.00
+0.00
+0.00
+0.00
+0.00
+0.00
+0.00
+0.00
+0.00
+0.00
+0.00
+0.00
+0.00
+0.00
+0.00
+0.00
+0.00
+0.00
+0.00
+0.00
+0.00
+0.00
+0.00
+0.00
+0.00
+0.00
+0.00
+0.00
+0.00
+0.00
+0.00
+0.00
+0.00
+0.00
+0.00
+0.00
+0.00
+0.00
+0.00
+0.00
+0.00
+0.00
+0.00
+0.00
+0.00
+0.00
+0.00
+0.00
+0.00
+0.00
+0.00
+0.00
+0.00
+0.00
+0.00
+0.00
+0.00
+0.00
+0.00
+0.00
+0.00
+0.00
+0.00
+0.00
+0.00
+0.00
+0.00
+0.00
+0.00
+0.00
+0.00
+0.00
+0.00
+0.00
+0.00
+0.00
+0.00
+0.00
+0.00
+0.00
+0.00
+0.00
+0.00
+0.00
+0.00
+0.00
+0.00
+0.00
+0.00
+0.00
+0.00
+0.00
+0.00
+0.00
+0.00
+0.00
+0.00
+0.00
+0.00
+0.00
+0.00
+0.00
+0.00
+0.00
+0.00
+0.00
+0.00
+0.00
+0.00
+0.00
+0.00
+0.00
+0.00
+0.00
+0.00
+0.00
+0.00
+0.00
+0.00
+0.00
+0.00
+0.00
+0.00
+0.00
+0.00
+0.00
+0.00
+0.00
+0.00
+0.00
+0.00
+0.00
+0.00
+0.00
+0.00
+0.00
+0.00
+0.00
+0.00
+0.00
+0.00
+0.00
+0.00
+0.00
+0.00
+0.00
+0.00
+0.00
+0.00
+0.00
+0.00
+0.00
+0.00
+0.00
+0.00
+0.00
+0.00
+0.00
+0.00
+0.00
+0.00
+0.00
+0.00
+0.00
+0.00
+0.00
+0.00
+0.00
+0.00
+0.00
+0.00
+0.00
+0.00
+0.00
+0.00
+0.00
+0.00
+0.00
+0.00
+0.00
+0.00
+0.00
+0.00
+0.00
+0.00
+0.00
+0.00
+0.00
+0.00
+0.00
+0.00
+0.00
+0.00
+0.00
+0.00
+0.00
+0.00
+0.00
+0.00
+0.00
+0.00
+0.00
+0.00
+0.00
+0.00
+0.00
+0.00
+0.00
+0.00
+0.00
+0.00
+0.00
+0.00
+0.00
+0.00
+0.00
+0.00
+0.00
+0.00
+0.00
+0.00
+0.00
+0.00
+0.00
+0.00
+0.00
+0.00
+0.00
+0.00
+0.00
+0.00
+0.00
+0.00
+0.00
+0.00
+0.00
+0.00
+0.00
+0.00
+0.00
+0.00
+0.00
+0.00
+0.00
+0.00
+0.00
+0.00
+0.00
+0.00
+0.00
+0.00
+0.00
+0.00
+0.00
+0.00
+0.00
+0.00
+0.00
+0.00
+0.00
+0.00
+0.00
+0.00
+0.00
+0.00
+0.00
+0.00
+0.00
+0.00
+0.00
+0.00
+0.00
+0.00
+0.00
+0.00
+0.00
+0.00
+0.00
+0.00
+0.00
+0.00
+0.00
+0.00
+0.00
+0.00
+0.00
+0.00
+0.00
+0.00
+0.00
+0.00
+0.00
+0.00
+0.00
+0.00
+0.00
+0.00
+0.00
+0.00
+0.00
+0.00
+0.00
+0.00
+0.00
+0.00
+0.00
+0.00
+0.00
+0.00
+0.00
+0.00
+0.00
+0.00
+0.00
+0.00
+0.00
+0.00
+0.00
+0.00
+0.00
+0.00
+0.00
+0.00
+0.00
+0.00
+0.00
+0.00
+0.00
+0.00
+0.00
+0.00
+0.00
+0.00
+0.00
+0.00
+0.00
+0.00
+0.00
+0.00
+0.00
+0.00
+0.00
+0.00
+0.00
+0.00
+0.00
+0.00
+0.00
+0.00
+0.00
+0.00
+0.00
+0.00
+0.00
+0.00
+0.00
+0.00
+0.00
+0.00
+0.00
+0.00
+0.00
+0.00
+0.00
+0.00
+0.00
+0.00
+0.00
+0.00
+0.00
+0.00
+0.00
+0.00
+0.00
+0.00
+0.00
+0.00
+0.00
+0.00
+0.00
+0.00
+0.00
+0.00
+0.00
+0.00
+0.00
+0.00
+0.00
+0.00
+0.00
+0.00
+0.00
+0.00
+0.00
+0.00
+0.00
+0.00
+0.00
+0.00
+0.00
+0.00
+0.00
+0.00
+0.00
+0.00
+0.00
+0.00
+0.00
+0.00
+0.00
+0.00
+0.00
+0.00
+0.00
+0.00
+0.00
+0.00
+0.00
+0.00
+0.00
+0.00
+0.00
+0.00
+0.00
+0.00
+0.00
+0.00
+0.00
+0.00
+0.00
+0.00
+0.00
+0.00
+0.00
+0.00
+0.00
+0.00
+0.00
+0.00
+0.00
+0.00
+0.00
+0.00
+0.00
+0.00
+0.00
+0.00
+0.00
+0.00
+0.00
+0.00
+0.00
+0.00
+0.00
+0.00
+0.00
+0.00
+0.00
+0.00
+0.00
+0.00
+0.00
+0.00
+0.00
+0.00
+0.00
+0.00
+0.00
+0.00
+0.00
+0.00
+0.00
+0.00
+0.00
+0.00
+0.00
+0.00
+0.00
+0.00
+0.00
+0.00
+0.00
+0.00
+0.00
+0.00
+0.00
+0.00
+0.00
+0.00
+0.00
+0.00
+0.00
+0.00
+0.00
+0.00
+0.00
+0.00
+0.00
+0.00
+0.00
+0.00
+0.00
+0.00
+0.00
+0.00
+0.00
+0.00
+0.00
+0.00
+0.00
+0.00
+0.00
+0.00
+0.00
+0.00
+0.00
+0.00
+0.00
+0.00
+0.00
+0.00
+0.00
+0.00
+0.00
+0.00
+0.00
+0.00
+0.00
+0.00
+0.00
+0.00
+0.00
+0.00
+0.00
+0.00
+0.00
+0.00
+0.00
+0.00
+0.00
+0.00
+0.00
+0.00
+0.00
+0.00
+0.00
+0.00
+0.00
+0.00
+0.00
+0.00
+0.00
+0.00
+0.00
+0.00
+0.00
+0.00
+0.00
+0.00
+0.00
+0.00
+0.00
+0.00
+0.00
+0.00
+0.00
+0.00
+0.00
+0.00
+0.00
+0.00
+0.00
+0.00
+0.00
+0.00
+0.00
+0.00
+0.00
+0.00
+0.00
+0.00
+0.00
+0.00
+0.00
+0.00
+0.00
+0.00
+0.00
+0.00
+0.00
+0.00
+0.00
+0.00
+0.00
+0.00
+0.00
+0.00
+0.00
+0.00
+0.00
+0.00
+0.00
+0.00
+0.00
+0.00
+0.00
+0.00
+0.00
+0.00
+0.00
+0.00
+0.00
+0.00
+0.00
+0.00
+0.00
+0.00
+0.00
+0.00
+0.00
+0.00
+0.00
+0.00
+0.00
+0.00
+0.00
+0.00
+0.00
+0.00
+0.00
+0.00
+0.00
+0.00
+0.00
+0.00
+0.00
+0.00
+0.00
+0.00
+0.00
+0.00
+0.00
+0.00
+0.00
+0.00
+0.00
+0.00
+0.00
+0.00
+0.00
+0.00
+0.00
+0.00
+0.00
+0.00
+0.00
+0.00
+0.00
+0.00
+0.00
+0.00
+0.00
+0.00
+0.00
+0.00
+0.00
+0.00
+0.00
+0.00
+0.00
+0.00
+0.00
+0.00
+0.00
+0.00
+0.00
+0.00
+0.00
+0.00
+0.00
+0.00
+0.00
+0.00
+0.00
+0.00
+0.00
+0.00
+0.00
+0.00
+0.00
+0.00
+0.00
+0.00
+0.00
+0.00
+0.00
+0.00
+0.00
+0.00
+0.00
+0.00
+0.00
+0.00
+0.00
+0.00
+0.00
+0.00
+0.00
+0.00
+0.00
+0.00
+0.00
+0.00
+0.00
+0.00
+0.00
+0.00
+0.00
+0.00
+0.00
+0.00
+0.00
+0.00
+0.00
+0.00
+0.00
+0.00
+0.00
+0.00
+0.00
+0.00
+0.00
+0.00
+0.00
+0.00
+0.00
+0.00
+0.00
+0.00
+0.00
+0.00
+0.00
+0.00
+0.00
+0.00
+0.00
+0.00
+0.00
+0.00
+0.00
+0.00
+0.00
+0.00
+0.00
+0.00
+0.00
+0.00
+0.00
+0.00
+0.00
+0.00
+0.00
+0.00
+0.00
+0.00
+0.00
+0.00
+0.00
+0.00
+0.00
+0.00
+0.00
+0.00
+0.00
+0.00
+0.00
+0.00
+0.00
+0.00
+0.00
+0.00
+0.00
+0.00
+0.00
+0.00
+0.00
+0.00
+0.00
+0.00
+0.00
+0.00
+0.00
+0.00
+0.00
+0.00
+0.00
+0.00
+0.00
+0.00
+0.00
+0.00
+0.00
+0.00
+0.00
+0.00
+0.00
+0.00
+0.00
+0.00
+0.00
+0.00
+0.00
+0.00
+0.00
+0.00
+0.00
+0.00
+0.00
+0.00
+0.00
+0.00
+0.00
+0.00
+0.00
+0.00
+0.00
+0.00
+0.00
+0.00
+0.00
+0.00
+0.00
+0.00
+0.00
+0.00
+0.00
+0.00
+0.00
+0.00
+0.00
+0.00
+0.00
+0.00
+0.00
+0.00
+0.00
+0.00
+0.00
+0.00
+0.00
+0.00
+0.00
+0.00
+0.00
+0.00
+0.00
+0.00
+0.00
+0.00
+0.00
+0.00
+0.00
+0.00
+0.00
+0.00
+0.00
+0.00
+0.00
+0.00
+0.00
+0.00
+0.00
+0.00
+0.00
+0.00
+0.00
+0.00
+0.00
+0.00
+0.00
+0.00
+0.00
+0.00
+0.00
+0.00
+0.00
+0.00
+0.00
+0.00
+0.00
+0.00
+0.00
+0.00
+0.00
+0.00
+0.00
+0.00
+0.00
+0.00
+0.00
+0.00
+0.00
+0.00
+0.00
+0.00
+0.00
+0.00
+0.00
+0.00
+0.00
+0.00
+0.00
+0.00
+0.00
+0.00
+0.00
+0.00
+0.00
+0.00
+0.00
+0.00
+0.00
+0.00
+0.00
+0.00
+0.00
+0.00
+0.00
+0.00
+0.00
+0.00
+0.00
+0.00
+0.00
+0.00
+0.00
+0.00
+0.00
+0.00
+0.00
+0.00
+0.00
+0.00
+0.00
+0.00
+0.00
+0.00
+0.00
+0.00
+0.00
+0.00
+0.00
+0.00
+0.00
+0.00
+0.00
+0.00
+0.00
+0.00
+0.00
+0.00
+0.00
+0.00
+0.00
+0.00
+0.00
+0.00
+0.00
+0.00
+0.00
+0.00
+0.00
+0.00
+0.00
+0.00
+0.00
+0.00
+0.00
+0.00
+0.00
+0.00
+0.00
+0.00
+0.00
+0.00
+0.00
+0.00
+0.00
+0.00
+0.00
+0.00
+0.00
+0.00
+0.00
+0.00
+0.00
+0.00
+0.00
+0.00
+0.00
+0.00
+0.00
+0.00
+0.00
+0.00
+0.00
+0.00
+0.00
+0.00
+0.00
+0.00
+0.00
+0.00
+0.00
+0.00
+0.00
+0.00
+0.00
+0.00
+0.00
+0.00
+0.00
+0.00
+0.00
+0.00
+0.00
+0.00
+0.00
+0.00
+0.00
+0.00
+0.00
+0.00
+0.00
+0.00
+0.00
+0.00
+0.00
+0.00
+0.00
+0.00
+0.00
+0.00
+0.00
+0.00
+0.00
+0.00
+0.00
+0.00
+0.00
+0.00
+0.00
+0.00
+0.00
+0.00
+0.00
+0.00
+0.00
+0.00
+0.00
+0.00
+0.00
+0.00
+0.00
+0.00
+0.00
+0.00
+0.00
+0.00
+0.00
+0.00
+0.00
+0.00
+0.00
+0.00
+0.00
+0.00
+0.00
+0.00
+0.00
+0.00
+0.00
+0.00
+0.00
+0.00
+0.00
+0.00
+0.00
+0.00
+0.00
+0.00
+0.00
+0.00
+0.00
+0.00
+0.00
+0.00
+0.00
+0.00
+0.00
+0.00
+0.00
+0.00
+0.00
+0.00
+0.00
+0.00
+0.00
+0.00
+0.00
+0.00
+0.00
+0.00
+0.00
+0.00
+0.00
+0.00
+0.00
+0.00
+0.00
+0.00
+0.00
+0.00
+0.00
+0.00
+0.00
+0.00
+0.00
+0.00
+0.00
+0.00
+0.00
+0.00
+0.00
+0.00
+0.00
+0.00
+0.00
+0.00
+0.00
+0.00
+0.00
+0.00
+0.00
+0.00
+0.00
+0.00
+0.00
+0.00
+0.00
+0.00
+0.00
+0.00
+0.00
+0.00
+0.00
+0.00
+0.00
+0.00
+0.00
+0.00
+0.00
+0.00
+0.00
+0.00
+0.00
+0.00
+0.00
+0.00
+0.00
+0.00
+0.00
+0.00
+0.00
+0.00
+0.00
+0.00
+0.00
+0.00
+0.00
+0.00
+0.00
+0.00
+0.00
+0.00
+0.00
+0.00
+0.00
+0.00
+0.00
+0.00
+0.00
+0.00
+0.00
+0.00
+0.00
+0.00
+0.00
+0.00
+0.00
+0.00
+0.00
+0.00
+0.00
+0.00
+0.00
+0.00
+0.00
+0.00
+0.00
+0.00
+0.00
+0.00
+0.00
+0.00
+0.00
+0.00
+0.00
+0.00
+0.00
+0.00
+0.00
+0.00
+0.00
+0.00
+0.00
+0.00
+0.00
+0.00
+0.00
+0.00
+0.00
+0.00
+0.00
+0.00
+0.00
+0.00
+0.00
+0.00
+0.00
+0.00
+0.00
+0.00
+0.00
+0.00
+0.00
+0.00
+0.00
+0.00
+0.00
+0.00
+0.00
+0.00
+0.00
+0.00
+0.00
+0.00
+0.00
+0.00
+0.00
+0.00
+0.00
+0.00
+0.00
+0.00
+0.00
+0.00
+0.00
+0.00
+0.00
+0.00
+0.00
+0.00
+0.00
+0.00
+0.00
+0.00
+0.00
+0.00
+0.00
+0.00
+0.00
+0.00
+0.00
+0.00
+0.00
+0.00
+0.00
+0.00
+0.00
+0.00
+0.00
+0.00
+0.00
+0.00
+0.00
+0.00
+0.00
+0.00
+0.00
+0.00
+0.00
+0.00
+0.00
+0.00
+0.00
+0.00
+0.00
+0.00
+0.00
+0.00
+0.00
+0.00
+0.00
+0.00
+0.00
+0.00
+0.00
+0.00
+0.00
+0.00
+0.00
+0.00
+0.00
+0.00
+0.00
+0.00
+0.00
+0.00
+0.00
+0.00
+0.00
+0.00
+0.00
+0.00
+0.00
+0.00
+0.00
+0.00
+0.00
+0.00
+0.00
+0.00
+0.00
+0.00
+0.00
+0.00
+0.00
+0.00
+0.00
+0.00
+0.00
+0.00
+0.00
+0.00
+0.00
+0.00
+0.00
+0.00
+0.00
+0.00
+0.00
+0.00
+0.00
+0.00
+0.00
+0.00
+0.00
+0.00
+0.00
+0.00
+0.00
+0.00
+0.00
+0.00
+0.00
+0.00
+0.00
+0.00
+0.00
+0.00
+0.00
+0.00
+0.00
+0.00
+0.00
+0.00
+0.00
+0.00
+0.00
+0.00
+0.00
+0.00
+0.00
+0.00
+0.00
+0.00
+0.00
+0.00
+0.00
+0.00
+0.00
+0.00
+0.00
+0.00
+0.00
+0.00
+0.00
+0.00
+0.00
+0.00
+0.00
+0.00
+0.00
+0.00
+0.00
+0.00
+0.00
+0.00
+0.00
+0.00
+0.00
+0.00
+0.00
+0.00
+0.00
+0.00
+0.00
+0.00
+0.00
+0.00
+0.00
+0.00
+0.00
+0.00
+0.00
+0.00
+0.00
+0.00
+0.00
+0.00
+0.00
+0.00
+0.00
+0.00
+0.00
+0.00
+0.00
+0.00
+0.00
+0.00
+0.00
+0.00
+0.00
+0.00
+0.00
+0.00
+0.00
+0.00
+0.00
+0.00
+0.00
+0.00
+0.00
+0.00
+0.00
+0.00
+0.00
+0.00
+0.00
+0.00
+0.00
+0.00
+0.00
+0.00
+0.00
+0.00
+0.00
+0.00
+0.00
+0.00
+0.00
+0.00
+0.00
+0.00
+0.00
+0.00
+0.00
+0.00
+0.00
+0.00
+0.00
+0.00
+0.00
+0.00
+0.00
+0.00
+0.00
+0.00
+0.00
+0.00
+0.00
+0.00
+0.00
+0.00
+0.00
+0.00
+0.00
+0.00
+0.00
+0.00
+0.00
+0.00
+0.00
+0.00
+0.00
+0.00
+0.00
+0.00
+0.00
+0.00
+0.00
+0.00
+0.00
+0.00
+0.00
+0.00
+0.00
+0.00
+0.00
+0.00
+0.00
+0.00
+0.00
+0.00
+0.00
+0.00
+0.00
+0.00
+0.00
+0.00
+0.00
+0.00
+0.00
+0.00
+0.00
+0.00
+0.00
+0.00
+0.00
+0.00
+0.00
+0.00
+0.00
+0.00
+0.00
+0.00
+0.00
+0.00
+0.00
+0.00
+0.00
+0.00
+0.00
+0.00
+0.00
+0.00
+0.00
+0.00
+0.00
+0.00
+0.00
+0.00
+0.00
+0.00
+0.00
+0.00
+0.00
+0.00
+0.00
+0.00
+0.00
+0.00
+0.00
+0.00
+0.00
+0.00
+0.00
+0.00
+0.00
+0.00
+0.00
+0.00
+0.00
+0.00
+0.00
+0.00
+0.00
+0.00
+0.00
+0.00
+0.00
+0.00
+0.00
+0.00
+0.00
+0.00
+0.00
+0.00
+0.00
+0.00
+0.00
+0.00
+0.00
+0.00
+0.00
+0.00
+0.00
+0.00
+0.00
+0.00
+0.00
+0.00
+0.00
+0.00
+0.00
+0.00
+0.00
+0.00
+0.00
+0.00
+0.00
+0.00
+0.00
+0.00
+0.00
+0.00
+0.00
+0.00
+0.00
+0.00
+0.00
+0.00
+0.00
+0.00
+0.00
+0.00
+0.00
+0.00
+0.00
+0.00
+0.00
+0.00
+0.00
+0.00
+0.00
+0.00
+0.00
+0.00
+0.00
+0.00
+0.00
+0.00
+0.00
+0.00
+0.00
+0.00
+0.00
+0.00
+0.00
+0.00
+0.00
+0.00
+0.00
+0.00
+0.00
+0.00
+0.00
+0.00
+0.00
+0.00
+0.00
+0.00
+0.00
+0.00
+0.00
+0.00
+0.00
+0.00
+0.00
+0.00
+0.00
+0.00
+0.00
+0.00
+0.00
+0.00
+0.00
+0.00
+0.00
+0.00
+0.00
+0.00
+0.00
+0.00
+0.00
+0.00
+0.00
+0.00
+0.00
+0.00
+0.00
+0.00
+0.00
+0.00
+0.00
+0.00
+0.00
+0.00
+0.00
+0.00
+0.00
+0.00
+0.00
+0.00
+0.00
+0.00
+0.00
+0.00
+0.00
+0.00
+0.00
+0.00
+0.00
+0.00
+0.00
+0.00
+0.00
+0.00
+0.00
+0.00
+0.00
+0.00
+0.00
+0.00
+0.00
+0.00
+0.00
+0.00
+0.00
+0.00
+0.00
+0.00
+0.00
+0.00
+0.00
+0.00
+0.00
+0.00
+0.00
+0.00
+0.00
+0.00
+0.00
+0.00
+0.00
+0.00
+0.00
+0.00
+0.00
+0.00
+0.00
+0.00
+0.00
+0.00
+0.00
+0.00
+0.00
+0.00
+0.00
+0.00
+0.00
+0.00
+0.00
+0.00
+0.00
+0.00
+0.00
+0.00
+0.00
+0.00
+0.00
+0.00
+0.00
+0.00
+0.00
+0.00
+0.00
+0.00
+0.00
+0.00
+0.00
+0.00
+0.00
+0.00
+0.00
+0.00
+0.00
+0.00
+0.00
+0.00
+0.00
+0.00
+0.00
+0.00
+0.00
+0.00
+0.00
+0.00
+0.00
+0.00
+0.00
+0.00
+0.00
+0.00
+0.00
+0.00
+0.00
+0.00
+0.00
+0.00
+0.00
+0.00
+0.00
+0.00
+0.00
+0.00
+0.00
+0.00
+0.00
+0.00
+0.00
+0.00
+0.00
+0.00
+0.00
+0.00
+0.00
+0.00
+0.00
+0.00
+0.00
+0.00
+0.00
+0.00
+0.00
+0.00
+0.00
+0.00
+0.00
+0.00
+0.00
+0.00
+0.00
+0.00
+0.00
+0.00
+0.00
+0.00
+0.00
+0.00
+0.00
+0.00
+0.00
+0.00
+0.00
+0.00
+0.00
+0.00
+0.00
+0.00
+0.00
+0.00
+0.00
+0.00
+0.00
+0.00
+0.00
+0.00
+0.00
+0.00
+0.00
+0.00
+0.00
+0.00
+0.00
+0.00
+0.00
+0.00
+0.00
+0.00
+0.00
+0.00
+0.00
+0.00
+0.00
+0.00
+0.00
+0.00
+0.00
+0.00
+0.00
+0.00
+0.00
+0.00
+0.00
+0.00
+0.00
+0.00
+0.00
+0.00
+0.00
+0.00
+0.00
+0.00
+0.00
+0.00
+0.00
+0.00
+0.00
+0.00
+0.00
+0.00
+0.00
+0.00
+0.00
+0.00
+0.00
+0.00
+0.00
+0.00
+0.00
+0.00
+0.00
+0.00
+0.00
+0.00
+0.00
+0.00
+0.00
+0.00
+0.00
+0.00
+0.00
+0.00
+0.00
+[303606][E][Wire.cpp:513] requestFrom(): i2cRead returned Error 263
+[304633][E][Wire.cpp:513] requestFrom(): i2cRead returned Error 263
+100.00
+[305710][E][Wire.cpp:513] requestFrom(): i2cRead returned Error 263
+[306737][E][Wire.cpp:513] requestFrom(): i2cRead returned Error 263
+100.00
+[307814][E][Wire.cpp:513] requestFrom(): i2cRead returned Error 263
+[308841][E][Wire.cpp:513] requestFrom(): i2cRead returned Error 263
+100.00
+[309918][E][Wire.cpp:513] requestFrom(): i2cRead returned Error 263
+[310945][E][Wire.cpp:513] requestFrom(): i2cRead returned Error 263
+100.00
+[312022][E][Wire.cpp:513] requestFrom(): i2cRead returned Error 263
+[313049][E][Wire.cpp:513] requestFrom(): i2cRead returned Error 263
+100.00
+[314126][E][Wire.cpp:513] requestFrom(): i2cRead returned Error 263
+[315153][E][Wire.cpp:513] requestFrom(): i2cRead returned Error 263
+100.00
+[316230][E][Wire.cpp:513] requestFrom(): i2cRead returned Error 263
+[317257][E][Wire.cpp:513] requestFrom(): i2cRead returned Error 263
+100.00
+[318334][E][Wire.cpp:513] requestFrom(): i2cRead returned Error 263
+[319361][E][Wire.cpp:513] requestFrom(): i2cRead returned Error 263
+100.00
+[320438][E][Wire.cpp:513] requestFrom(): i2cRead returned Error 263
+[321465][E][Wire.cpp:513] requestFrom(): i2cRead returned Error 263
+100.00
+[322542][E][Wire.cpp:513] requestFrom(): i2cRead returned Error 263
+[323569][E][Wire.cpp:513] requestFrom(): i2cRead returned Error 263
+100.00
+[324646][E][Wire.cpp:513] requestFrom(): i2cRead returned Error 263
+[325673][E][Wire.cpp:513] requestFrom(): i2cRead returned Error 263
+100.00
+[326750][E][Wire.cpp:513] requestFrom(): i2cRead returned Error 263
+[327777][E][Wire.cpp:513] requestFrom(): i2cRead returned Error 263
+100.00
+[328854][E][Wire.cpp:513] requestFrom(): i2cRead returned Error 263
+[329881][E][Wire.cpp:513] requestFrom(): i2cRead returned Error 263
+100.00
+[330958][E][Wire.cpp:513] requestFrom(): i2cRead returned Error 263
+[331985][E][Wire.cpp:513] requestFrom(): i2cRead returned Error 263
+100.00
+[333062][E][Wire.cpp:513] requestFrom(): i2cRead returned Error 263
+[334089][E][Wire.cpp:513] requestFrom(): i2cRead returned Error 263
+100.00
+[335166][E][Wire.cpp:513] requestFrom(): i2cRead returned Error 263
+[336193][E][Wire.cpp:513] requestFrom(): i2cRead returned Error 263
+100.00
+[337270][E][Wire.cpp:513] requestFrom(): i2cRead returned Error 263
+[338297][E][Wire.cpp:513] requestFrom(): i2cRead returned Error 263
+100.00
+[339374][E][Wire.cpp:513] requestFrom(): i2cRead returned Error 263
+[340401][E][Wire.cpp:513] requestFrom(): i2cRead returned Error 263
+100.00
+[341478][E][Wire.cpp:513] requestFrom(): i2cRead returned Error 263
+[342505][E][Wire.cpp:513] requestFrom(): i2cRead returned Error 263
+100.00
+[343582][E][Wire.cpp:513] requestFrom(): i2cRead returned Error 263
+[344609][E][Wire.cpp:513] requestFrom(): i2cRead returned Error 263
+100.00
+[345686][E][Wire.cpp:513] requestFrom(): i2cRead returned Error 263
+[346713][E][Wire.cpp:513] requestFrom(): i2cRead returned Error 263
+100.00
+[347790][E][Wire.cpp:513] requestFrom(): i2cRead returned Error 263
+[348817][E][Wire.cpp:513] requestFrom(): i2cRead returned Error 263
+100.00
+[349894][E][Wire.cpp:513] requestFrom(): i2cRead returned Error 263
+[350921][E][Wire.cpp:513] requestFrom(): i2cRead returned Error 263
+100.00
+[351998][E][Wire.cpp:513] requestFrom(): i2cRead returned Error 263
+[353025][E][Wire.cpp:513] requestFrom(): i2cRead returned Error 263
+100.00
+[354102][E][Wire.cpp:513] requestFrom(): i2cRead returned Error 263
+[355129][E][Wire.cpp:513] requestFrom(): i2cRead returned Error 263
+100.00
+[356206][E][Wire.cpp:513] requestFrom(): i2cRead returned Error 263
+[357233][E][Wire.cpp:513] requestFrom(): i2cRead returned Error 263
+100.00
+[358310][E][Wire.cpp:513] requestFrom(): i2cRead returned Error 263
+[359337][E][Wire.cpp:513] requestFrom(): i2cRead returned Error 263
+100.00
+[360414][E][Wire.cpp:513] requestFrom(): i2cRead returned Error 263
+[361441][E][Wire.cpp:513] requestFrom(): i2cRead returned Error 263
+100.00
+[362518][E][Wire.cpp:513] requestFrom(): i2cRead returned Error 263
+[363545][E][Wire.cpp:513] requestFrom(): i2cRead returned Error 263
+100.00
+[364622][E][Wire.cpp:513] requestFrom(): i2cRead returned Error 263
+[365649][E][Wire.cpp:513] requestFrom(): i2cRead returned Error 263
+100.00
+[366726][E][Wire.cpp:513] requestFrom(): i2cRead returned Error 263
+[367753][E][Wire.cpp:513] requestFrom(): i2cRead returned Error 263
+100.00
+[368830][E][Wire.cpp:513] requestFrom(): i2cRead returned Error 263
+[369857][E][Wire.cpp:513] requestFrom(): i2cRead returned Error 263
+100.00
+[370934][E][Wire.cpp:513] requestFrom(): i2cRead returned Error 263
+[371961][E][Wire.cpp:513] requestFrom(): i2cRead returned Error 263
+100.00
+[373038][E][Wire.cpp:513] requestFrom(): i2cRead returned Error 263
+[374065][E][Wire.cpp:513] requestFrom(): i2cRead returned Error 263
+100.00
+[375142][E][Wire.cpp:513] requestFrom(): i2cRead returned Error 263
+[376169][E][Wire.cpp:513] requestFrom(): i2cRead returned Error 263
+100.00
+[377246][E][Wire.cpp:513] requestFrom(): i2cRead returned Error 263
+[378273][E][Wire.cpp:513] requestFrom(): i2cRead returned Error 263
+100.00
+[379350][E][Wire.cpp:513] requestFrom(): i2cRead returned Error 263
+[380377][E][Wire.cpp:513] requestFrom(): i2cRead returned Error 263
+100.00
+[381454][E][Wire.cpp:513] requestFrom(): i2cRead returned Error 263
+[382481][E][Wire.cpp:513] requestFrom(): i2cRead returned Error 263
+100.00
+[383558][E][Wire.cpp:513] requestFrom(): i2cRead returned Error 263
+[384585][E][Wire.cpp:513] requestFrom(): i2cRead returned Error 263
+100.00
+[385662][E][Wire.cpp:513] requestFrom(): i2cRead returned Error 263
+[386689][E][Wire.cpp:513] requestFrom(): i2cRead returned Error 263
+100.00
+[387766][E][Wire.cpp:513] requestFrom(): i2cRead returned Error 263
+[388793][E][Wire.cpp:513] requestFrom(): i2cRead returned Error 263
+100.00
+[389870][E][Wire.cpp:513] requestFrom(): i2cRead returned Error 263
+[390897][E][Wire.cpp:513] requestFrom(): i2cRead returned Error 263
+100.00
+[391974][E][Wire.cpp:513] requestFrom(): i2cRead returned Error 263
+[393001][E][Wire.cpp:513] requestFrom(): i2cRead returned Error 263
+100.00
+[394078][E][Wire.cpp:513] requestFrom(): i2cRead returned Error 263
+[395105][E][Wire.cpp:513] requestFrom(): i2cRead returned Error 263
+100.00
+[396182][E][Wire.cpp:513] requestFrom(): i2cRead returned Error 263
+[397209][E][Wire.cpp:513] requestFrom(): i2cRead returned Error 263
+100.00
+[398286][E][Wire.cpp:513] requestFrom(): i2cRead returned Error 263
+[399313][E][Wire.cpp:513] requestFrom(): i2cRead returned Error 263
+100.00
+[400390][E][Wire.cpp:513] requestFrom(): i2cRead returned Error 263
+[401417][E][Wire.cpp:513] requestFrom(): i2cRead returned Error 263
+100.00
+[402494][E][Wire.cpp:513] requestFrom(): i2cRead returned Error 263
+[403521][E][Wire.cpp:513] requestFrom(): i2cRead returned Error 263
+100.00
+[404598][E][Wire.cpp:513] requestFrom(): i2cRead returned Error 263
+[405625][E][Wire.cpp:513] requestFrom(): i2cRead returned Error 263
+100.00
+[406702][E][Wire.cpp:513] requestFrom(): i2cRead returned Error 263
+[407729][E][Wire.cpp:513] requestFrom(): i2cRead returned Error 263
+100.00
+[408805][E][Wire.cpp:513] requestFrom(): i2cRead returned Error 263
+[409832][E][Wire.cpp:513] requestFrom(): i2cRead returned Error 263
+100.00
+[410909][E][Wire.cpp:513] requestFrom(): i2cRead returned Error 263
+[411936][E][Wire.cpp:513] requestFrom(): i2cRead returned Error 263
+100.00
+[413013][E][Wire.cpp:513] requestFrom(): i2cRead returned Error 263
+[414040][E][Wire.cpp:513] requestFrom(): i2cRead returned Error 263
+100.00
+[415117][E][Wire.cpp:513] requestFrom(): i2cRead returned Error 263
+[416144][E][Wire.cpp:513] requestFrom(): i2cRead returned Error 263
+100.00
+[417221][E][Wire.cpp:513] requestFrom(): i2cRead returned Error 263
+[418248][E][Wire.cpp:513] requestFrom(): i2cRead returned Error 263
+100.00
+[419325][E][Wire.cpp:513] requestFrom(): i2cRead returned Error 263
+[420352][E][Wire.cpp:513] requestFrom(): i2cRead returned Error 263
+100.00
+[421429][E][Wire.cpp:513] requestFrom(): i2cRead returned Error 263
+[422456][E][Wire.cpp:513] requestFrom(): i2cRead returned Error 263
+100.00
+[423533][E][Wire.cpp:513] requestFrom(): i2cRead returned Error 263
+[424560][E][Wire.cpp:513] requestFrom(): i2cRead returned Error 263
+100.00
+[425637][E][Wire.cpp:513] requestFrom(): i2cRead returned Error 263
+[426664][E][Wire.cpp:513] requestFrom(): i2cRead returned Error 263
+100.00
+[427741][E][Wire.cpp:513] requestFrom(): i2cRead returned Error 263
+[428768][E][Wire.cpp:513] requestFrom(): i2cRead returned Error 263
+100.00
+[429845][E][Wire.cpp:513] requestFrom(): i2cRead returned Error 263
+[430872][E][Wire.cpp:513] requestFrom(): i2cRead returned Error 263
+100.00
+[431949][E][Wire.cpp:513] requestFrom(): i2cRead returned Error 263
+[432976][E][Wire.cpp:513] requestFrom(): i2cRead returned Error 263
+100.00
+[434053][E][Wire.cpp:513] requestFrom(): i2cRead returned Error 263
+[435080][E][Wire.cpp:513] requestFrom(): i2cRead returned Error 263
+100.00
+[436157][E][Wire.cpp:513] requestFrom(): i2cRead returned Error 263
+[437184][E][Wire.cpp:513] requestFrom(): i2cRead returned Error 263
+100.00
+[438261][E][Wire.cpp:513] requestFrom(): i2cRead returned Error 263
+[439288][E][Wire.cpp:513] requestFrom(): i2cRead returned Error 263
+100.00
+[440365][E][Wire.cpp:513] requestFrom(): i2cRead returned Error 263
+[441392][E][Wire.cpp:513] requestFrom(): i2cRead returned Error 263
+100.00
+[442469][E][Wire.cpp:513] requestFrom(): i2cRead returned Error 263
+[443496][E][Wire.cpp:513] requestFrom(): i2cRead returned Error 263
+100.00
+[444573][E][Wire.cpp:513] requestFrom(): i2cRead returned Error 263
+[445600][E][Wire.cpp:513] requestFrom(): i2cRead returned Error 263
+100.00
+[446677][E][Wire.cpp:513] requestFrom(): i2cRead returned Error 263
+[447704][E][Wire.cpp:513] requestFrom(): i2cRead returned Error 263
+100.00
+[448781][E][Wire.cpp:513] requestFrom(): i2cRead returned Error 263
+[449808][E][Wire.cpp:513] requestFrom(): i2cRead returned Error 263
+100.00
+[450885][E][Wire.cpp:513] requestFrom(): i2cRead returned Error 263
+[451912][E][Wire.cpp:513] requestFrom(): i2cRead returned Error 263
+100.00
+[452989][E][Wire.cpp:513] requestFrom(): i2cRead returned Error 263
+[454016][E][Wire.cpp:513] requestFrom(): i2cRead returned Error 263
+100.00
+[455093][E][Wire.cpp:513] requestFrom(): i2cRead returned Error 263
+[456120][E][Wire.cpp:513] requestFrom(): i2cRead returned Error 263
+100.00
+[457197][E][Wire.cpp:513] requestFrom(): i2cRead returned Error 263
+[458224][E][Wire.cpp:513] requestFrom(): i2cRead returned Error 263
+100.00
+[459301][E][Wire.cpp:513] requestFrom(): i2cRead returned Error 263
+[460328][E][Wire.cpp:513] requestFrom(): i2cRead returned Error 263
+100.00
+[461405][E][Wire.cpp:513] requestFrom(): i2cRead returned Error 263
+[462432][E][Wire.cpp:513] requestFrom(): i2cRead returned Error 263
+100.00
+[463509][E][Wire.cpp:513] requestFrom(): i2cRead returned Error 263
+[464536][E][Wire.cpp:513] requestFrom(): i2cRead returned Error 263
+100.00
+[465613][E][Wire.cpp:513] requestFrom(): i2cRead returned Error 263
+[466640][E][Wire.cpp:513] requestFrom(): i2cRead returned Error 263
+100.00
+[467717][E][Wire.cpp:513] requestFrom(): i2cRead returned Error 263
+[468744][E][Wire.cpp:513] requestFrom(): i2cRead returned Error 263
+100.00
+[469821][E][Wire.cpp:513] requestFrom(): i2cRead returned Error 263
+[470848][E][Wire.cpp:513] requestFrom(): i2cRead returned Error 263
+100.00
+[471925][E][Wire.cpp:513] requestFrom(): i2cRead returned Error 263
+[472952][E][Wire.cpp:513] requestFrom(): i2cRead returned Error 263
+100.00
+[474029][E][Wire.cpp:513] requestFrom(): i2cRead returned Error 263
+[475056][E][Wire.cpp:513] requestFrom(): i2cRead returned Error 263
+100.00
+[476133][E][Wire.cpp:513] requestFrom(): i2cRead returned Error 263
+[477160][E][Wire.cpp:513] requestFrom(): i2cRead returned Error 263
+100.00
+[478237][E][Wire.cpp:513] requestFrom(): i2cRead returned Error 263
+[479264][E][Wire.cpp:513] requestFrom(): i2cRead returned Error 263
+100.00
+[480341][E][Wire.cpp:513] requestFrom(): i2cRead returned Error 263
+[481368][E][Wire.cpp:513] requestFrom(): i2cRead returned Error 263
+100.00
+[482445][E][Wire.cpp:513] requestFrom(): i2cRead returned Error 263
+[483472][E][Wire.cpp:513] requestFrom(): i2cRead returned Error 263
+100.00
+[484549][E][Wire.cpp:513] requestFrom(): i2cRead returned Error 263
+[485576][E][Wire.cpp:513] requestFrom(): i2cRead returned Error 263
+100.00
+[486653][E][Wire.cpp:513] requestFrom(): i2cRead returned Error 263
+[487680][E][Wire.cpp:513] requestFrom(): i2cRead returned Error 263
+100.00
+[488757][E][Wire.cpp:513] requestFrom(): i2cRead returned Error 263
+[489784][E][Wire.cpp:513] requestFrom(): i2cRead returned Error 263
+100.00
+[490861][E][Wire.cpp:513] requestFrom(): i2cRead returned Error 263
+[491888][E][Wire.cpp:513] requestFrom(): i2cRead returned Error 263
+100.00
+[492965][E][Wire.cpp:513] requestFrom(): i2cRead returned Error 263
+[493992][E][Wire.cpp:513] requestFrom(): i2cRead returned Error 263
+100.00
+[495069][E][Wire.cpp:513] requestFrom(): i2cRead returned Error 263
+[496096][E][Wire.cpp:513] requestFrom(): i2cRead returned Error 263
+100.00
+[497173][E][Wire.cpp:513] requestFrom(): i2cRead returned Error 263
+[498200][E][Wire.cpp:513] requestFrom(): i2cRead returned Error 263
+100.00
+[499277][E][Wire.cpp:513] requestFrom(): i2cRead returned Error 263
+[500304][E][Wire.cpp:513] requestFrom(): i2cRead returned Error 263
+100.00
+[501381][E][Wire.cpp:513] requestFrom(): i2cRead returned Error 263
+[502408][E][Wire.cpp:513] requestFrom(): i2cRead returned Error 263
+100.00
+[503485][E][Wire.cpp:513] requestFrom(): i2cRead returned Error 263
+[504512][E][Wire.cpp:513] requestFrom(): i2cRead returned Error 263
+100.00
+[505589][E][Wire.cpp:513] requestFrom(): i2cRead returned Error 263
+[506616][E][Wire.cpp:513] requestFrom(): i2cRead returned Error 263
+100.00
+[507693][E][Wire.cpp:513] requestFrom(): i2cRead returned Error 263
+[508720][E][Wire.cpp:513] requestFrom(): i2cRead returned Error 263
+100.00
+[509797][E][Wire.cpp:513] requestFrom(): i2cRead returned Error 263
+[510824][E][Wire.cpp:513] requestFrom(): i2cRead returned Error 263
+100.00
+[511901][E][Wire.cpp:513] requestFrom(): i2cRead returned Error 263
+[512928][E][Wire.cpp:513] requestFrom(): i2cRead returned Error 263
+100.00
+[514005][E][Wire.cpp:513] requestFrom(): i2cRead returned Error 263
+[515032][E][Wire.cpp:513] requestFrom(): i2cRead returned Error 263
+100.00
+[516109][E][Wire.cpp:513] requestFrom(): i2cRead returned Error 263
+[517136][E][Wire.cpp:513] requestFrom(): i2cRead returned Error 263
+100.00
+[518213][E][Wire.cpp:513] requestFrom(): i2cRead returned Error 263
+[519240][E][Wire.cpp:513] requestFrom(): i2cRead returned Error 263
+100.00
+[520317][E][Wire.cpp:513] requestFrom(): i2cRead returned Error 263
+[521344][E][Wire.cpp:513] requestFrom(): i2cRead returned Error 263
+100.00
+[522421][E][Wire.cpp:513] requestFrom(): i2cRead returned Error 263
+[523448][E][Wire.cpp:513] requestFrom(): i2cRead returned Error 263
+100.00
+[524525][E][Wire.cpp:513] requestFrom(): i2cRead returned Error 263
+[525552][E][Wire.cpp:513] requestFrom(): i2cRead returned Error 263
+100.00
+[526629][E][Wire.cpp:513] requestFrom(): i2cRead returned Error 263
+[527656][E][Wire.cpp:513] requestFrom(): i2cRead returned Error 263
+100.00
+[528733][E][Wire.cpp:513] requestFrom(): i2cRead returned Error 263
+[529760][E][Wire.cpp:513] requestFrom(): i2cRead returned Error 263
+100.00
+[530837][E][Wire.cpp:513] requestFrom(): i2cRead returned Error 263
+[531864][E][Wire.cpp:513] requestFrom(): i2cRead returned Error 263
+100.00
+[532941][E][Wire.cpp:513] requestFrom(): i2cRead returned Error 263
+[533968][E][Wire.cpp:513] requestFrom(): i2cRead returned Error 263
+100.00
+[535045][E][Wire.cpp:513] requestFrom(): i2cRead returned Error 263
+[536072][E][Wire.cpp:513] requestFrom(): i2cRead returned Error 263
+100.00
+[537149][E][Wire.cpp:513] requestFrom(): i2cRead returned Error 263
+[538176][E][Wire.cpp:513] requestFrom(): i2cRead returned Error 263
+100.00
+[539253][E][Wire.cpp:513] requestFrom(): i2cRead returned Error 263
+[540280][E][Wire.cpp:513] requestFrom(): i2cRead returned Error 263
+100.00
+[541357][E][Wire.cpp:513] requestFrom(): i2cRead returned Error 263
+[542384][E][Wire.cpp:513] requestFrom(): i2cRead returned Error 263
+100.00
+[543460][E][Wire.cpp:513] requestFrom(): i2cRead returned Error 263
+[544487][E][Wire.cpp:513] requestFrom(): i2cRead returned Error 263
+100.00
+[545564][E][Wire.cpp:513] requestFrom(): i2cRead returned Error 263
+[546591][E][Wire.cpp:513] requestFrom(): i2cRead returned Error 263
+100.00
+[547668][E][Wire.cpp:513] requestFrom(): i2cRead returned Error 263
+[548695][E][Wire.cpp:513] requestFrom(): i2cRead returned Error 263
+100.00
+[549772][E][Wire.cpp:513] requestFrom(): i2cRead returned Error 263
+[550799][E][Wire.cpp:513] requestFrom(): i2cRead returned Error 263
+100.00
+[551876][E][Wire.cpp:513] requestFrom(): i2cRead returned Error 263
+[552903][E][Wire.cpp:513] requestFrom(): i2cRead returned Error 263
+100.00
+[553980][E][Wire.cpp:513] requestFrom(): i2cRead returned Error 263
+[555007][E][Wire.cpp:513] requestFrom(): i2cRead returned Error 263
+100.00
+[556084][E][Wire.cpp:513] requestFrom(): i2cRead returned Error 263
+[557111][E][Wire.cpp:513] requestFrom(): i2cRead returned Error 263
+100.00
+[558188][E][Wire.cpp:513] requestFrom(): i2cRead returned Error 263
+[559215][E][Wire.cpp:513] requestFrom(): i2cRead returned Error 263
+100.00
+[560292][E][Wire.cpp:513] requestFrom(): i2cRead returned Error 263
+[561319][E][Wire.cpp:513] requestFrom(): i2cRead returned Error 263
+100.00
+[562396][E][Wire.cpp:513] requestFrom(): i2cRead returned Error 263
+[563423][E][Wire.cpp:513] requestFrom(): i2cRead returned Error 263
+100.00
+[564500][E][Wire.cpp:513] requestFrom(): i2cRead returned Error 263
+[565527][E][Wire.cpp:513] requestFrom(): i2cRead returned Error 263
+100.00
+[566604][E][Wire.cpp:513] requestFrom(): i2cRead returned Error 263
+[567631][E][Wire.cpp:513] requestFrom(): i2cRead returned Error 263
+100.00
+[568708][E][Wire.cpp:513] requestFrom(): i2cRead returned Error 263
+[569735][E][Wire.cpp:513] requestFrom(): i2cRead returned Error 263
+100.00
+[570812][E][Wire.cpp:513] requestFrom(): i2cRead returned Error 263
+[571839][E][Wire.cpp:513] requestFrom(): i2cRead returned Error 263
+100.00
+[572916][E][Wire.cpp:513] requestFrom(): i2cRead returned Error 263
+[573943][E][Wire.cpp:513] requestFrom(): i2cRead returned Error 263
+100.00
+[575020][E][Wire.cpp:513] requestFrom(): i2cRead returned Error 263
+[576047][E][Wire.cpp:513] requestFrom(): i2cRead returned Error 263
+100.00
+[577124][E][Wire.cpp:513] requestFrom(): i2cRead returned Error 263
+[578151][E][Wire.cpp:513] requestFrom(): i2cRead returned Error 263
+100.00
+[579228][E][Wire.cpp:513] requestFrom(): i2cRead returned Error 263
+[580255][E][Wire.cpp:513] requestFrom(): i2cRead returned Error 263
+100.00
+[581332][E][Wire.cpp:513] requestFrom(): i2cRead returned Error 263
+[582359][E][Wire.cpp:513] requestFrom(): i2cRead returned Error 263
+100.00
+[583436][E][Wire.cpp:513] requestFrom(): i2cRead returned Error 263
+[584463][E][Wire.cpp:513] requestFrom(): i2cRead returned Error 263
+100.00
+[585540][E][Wire.cpp:513] requestFrom(): i2cRead returned Error 263
+[586567][E][Wire.cpp:513] requestFrom(): i2cRead returned Error 263
+100.00
+[587644][E][Wire.cpp:513] requestFrom(): i2cRead returned Error 263
+[588671][E][Wire.cpp:513] requestFrom(): i2cRead returned Error 263
+100.00
+[589748][E][Wire.cpp:513] requestFrom(): i2cRead returned Error 263
+[590775][E][Wire.cpp:513] requestFrom(): i2cRead returned Error 263
+100.00
+[591852][E][Wire.cpp:513] requestFrom(): i2cRead returned Error 263
+[592879][E][Wire.cpp:513] requestFrom(): i2cRead returned Error 263
+100.00
+[593956][E][Wire.cpp:513] requestFrom(): i2cRead returned Error 263
+[594983][E][Wire.cpp:513] requestFrom(): i2cRead returned Error 263
+100.00
+[596060][E][Wire.cpp:513] requestFrom(): i2cRead returned Error 263
+[597087][E][Wire.cpp:513] requestFrom(): i2cRead returned Error 263
+100.00
+[598164][E][Wire.cpp:513] requestFrom(): i2cRead returned Error 263
+[599191][E][Wire.cpp:513] requestFrom(): i2cRead returned Error 263
+100.00
+[600268][E][Wire.cpp:513] requestFrom(): i2cRead returned Error 263
+[601295][E][Wire.cpp:513] requestFrom(): i2cRead returned Error 263
+100.00
+[602372][E][Wire.cpp:513] requestFrom(): i2cRead returned Error 263
+[603399][E][Wire.cpp:513] requestFrom(): i2cRead returned Error 263
+100.00
+[604476][E][Wire.cpp:513] requestFrom(): i2cRead returned Error 263
+[605503][E][Wire.cpp:513] requestFrom(): i2cRead returned Error 263
+100.00
+[606580][E][Wire.cpp:513] requestFrom(): i2cRead returned Error 263
+[607607][E][Wire.cpp:513] requestFrom(): i2cRead returned Error 263
+100.00
+[608684][E][Wire.cpp:513] requestFrom(): i2cRead returned Error 263
+[609711][E][Wire.cpp:513] requestFrom(): i2cRead returned Error 263
+100.00
+[610788][E][Wire.cpp:513] requestFrom(): i2cRead returned Error 263
+[611815][E][Wire.cpp:513] requestFrom(): i2cRead returned Error 263
+100.00
+[612892][E][Wire.cpp:513] requestFrom(): i2cRead returned Error 263
+[613919][E][Wire.cpp:513] requestFrom(): i2cRead returned Error 263
+100.00
+[614996][E][Wire.cpp:513] requestFrom(): i2cRead returned Error 263
+[616023][E][Wire.cpp:513] requestFrom(): i2cRead returned Error 263
+100.00
+[617100][E][Wire.cpp:513] requestFrom(): i2cRead returned Error 263
+[618127][E][Wire.cpp:513] requestFrom(): i2cRead returned Error 263
+100.00
+[619204][E][Wire.cpp:513] requestFrom(): i2cRead returned Error 263
+[620231][E][Wire.cpp:513] requestFrom(): i2cRead returned Error 263
+100.00
+[621308][E][Wire.cpp:513] requestFrom(): i2cRead returned Error 263
+[622335][E][Wire.cpp:513] requestFrom(): i2cRead returned Error 263
+100.00
+[623412][E][Wire.cpp:513] requestFrom(): i2cRead returned Error 263
+[624439][E][Wire.cpp:513] requestFrom(): i2cRead returned Error 263
+100.00
+[625516][E][Wire.cpp:513] requestFrom(): i2cRead returned Error 263
+[626543][E][Wire.cpp:513] requestFrom(): i2cRead returned Error 263
+100.00
+[627620][E][Wire.cpp:513] requestFrom(): i2cRead returned Error 263
+[628647][E][Wire.cpp:513] requestFrom(): i2cRead returned Error 263
+100.00
+[629724][E][Wire.cpp:513] requestFrom(): i2cRead returned Error 263
+[630751][E][Wire.cpp:513] requestFrom(): i2cRead returned Error 263
+100.00
+[631828][E][Wire.cpp:513] requestFrom(): i2cRead returned Error 263
+[632855][E][Wire.cpp:513] requestFrom(): i2cRead returned Error 263
+100.00
+[633932][E][Wire.cpp:513] requestFrom(): i2cRead returned Error 263
+[634959][E][Wire.cpp:513] requestFrom(): i2cRead returned Error 263
+100.00
+[636036][E][Wire.cpp:513] requestFrom(): i2cRead returned Error 263
+[637063][E][Wire.cpp:513] requestFrom(): i2cRead returned Error 263
+100.00
+[638140][E][Wire.cpp:513] requestFrom(): i2cRead returned Error 263
+[639167][E][Wire.cpp:513] requestFrom(): i2cRead returned Error 263
+100.00
+[640244][E][Wire.cpp:513] requestFrom(): i2cRead returned Error 263
+[641271][E][Wire.cpp:513] requestFrom(): i2cRead returned Error 263
+100.00
+[642348][E][Wire.cpp:513] requestFrom(): i2cRead returned Error 263
+[643375][E][Wire.cpp:513] requestFrom(): i2cRead returned Error 263
+100.00
+[644452][E][Wire.cpp:513] requestFrom(): i2cRead returned Error 263
+[645479][E][Wire.cpp:513] requestFrom(): i2cRead returned Error 263
+100.00
+[646556][E][Wire.cpp:513] requestFrom(): i2cRead returned Error 263
+[647583][E][Wire.cpp:513] requestFrom(): i2cRead returned Error 263
+100.00
+[648660][E][Wire.cpp:513] requestFrom(): i2cRead returned Error 263
+[649687][E][Wire.cpp:513] requestFrom(): i2cRead returned Error 263
+100.00
+[650764][E][Wire.cpp:513] requestFrom(): i2cRead returned Error 263
+[651791][E][Wire.cpp:513] requestFrom(): i2cRead returned Error 263
+100.00
+[652868][E][Wire.cpp:513] requestFrom(): i2cRead returned Error 263
+[653895][E][Wire.cpp:513] requestFrom(): i2cRead returned Error 263
+100.00
+[654972][E][Wire.cpp:513] requestFrom(): i2cRead returned Error 263
+[655999][E][Wire.cpp:513] requestFrom(): i2cRead returned Error 263
+100.00
+[657076][E][Wire.cpp:513] requestFrom(): i2cRead returned Error 263
+[658103][E][Wire.cpp:513] requestFrom(): i2cRead returned Error 263
+100.00
